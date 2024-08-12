@@ -1,0 +1,37 @@
+package com.joy.portfolio.entity;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import lombok.Data;
+
+@Entity
+@Data
+public class ProjectData {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.UUID)
+	private String id;
+
+	@Column(nullable = false)
+	private String heading;
+
+	@Column(nullable = false)
+	private String description;
+	
+	@OneToOne
+	@JoinColumn(name="image_id")
+	private Image image;
+
+	@ManyToOne
+	@JoinColumn(name = "project_id", nullable = false)
+	@JsonBackReference(value = "project-projectData")
+	private Project project;
+}
