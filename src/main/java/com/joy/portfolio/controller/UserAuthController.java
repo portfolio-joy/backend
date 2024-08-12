@@ -23,8 +23,7 @@ public class UserAuthController {
 
     @PostMapping("/register")
     public @ResponseBody ResponseEntity<User> register(@Valid @RequestBody RegisterDto registerDto) {
-    	System.out.println(registerUserDto);
-        User registeredUser = userAuthService.register(registerUserDto);
+        User registeredUser = userAuthService.register(registerDto);
 
         return ResponseEntity.ok(registeredUser);
     }

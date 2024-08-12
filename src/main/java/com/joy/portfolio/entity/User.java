@@ -39,9 +39,6 @@ public class User implements UserDetails{
 	String lastName;
 
 	@Column(nullable = false)
-	int age;
-
-	@Column(nullable = false)
 	@Email
 	String emailId;
 
@@ -52,6 +49,9 @@ public class User implements UserDetails{
 	@Column(nullable = false)
 	@ValidPassword
 	String password;
+	
+	@Column(nullable = false)
+	String portfolioUrl;
 	
 	@Column(unique=true)
 	String token;
