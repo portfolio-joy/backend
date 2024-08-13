@@ -10,8 +10,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.joy.portfolio.dto.LoginDto;
+import com.joy.portfolio.dto.LoginResponseDto;
 import com.joy.portfolio.dto.RegisterDto;
 import com.joy.portfolio.dto.ResponseUserDto;
+import com.joy.portfolio.entity.User;
+import com.joy.portfolio.service.JWTService;
 import com.joy.portfolio.service.UserAuthService;
 
 import jakarta.validation.Valid;
@@ -20,6 +23,9 @@ import jakarta.validation.Valid;
 @RestController
 public class UserAuthController {
     
+	@Autowired
+    private JWTService jwtService;
+	
 	@Autowired
     private UserAuthService userAuthService;
 
@@ -30,8 +36,16 @@ public class UserAuthController {
     }
     
     @PostMapping("/login")
-    public @ResponseBody ResponseEntity<ResponseUserDto> login(@Valid @RequestBody LoginDto loginDto)
+    public @ResponseBody ResponseEntity<LoginResponseDto> login(@Valid @RequestBody LoginDto loginDto)
     {
-    	return ResponseEntity.status(HttpStatus.OK).body(null);
+    	User authenticatedUser = userAuthService.login(loginDto);
+
+        String jwtToken = jwtService.generateToken(authenticatedUser);
+
+        LoginResponseDto loginResponseDto = new LoginResponseDto();
+        loginResponseDto.setToken(jwtToken);
+        loginResponseDto.setExpiresIn(jwtService.getExpirationTime());
+
+        return ResponseEntity.ok(loginResponseDto);
     }
 }
