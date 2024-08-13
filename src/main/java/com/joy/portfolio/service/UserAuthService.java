@@ -2,11 +2,13 @@ package com.joy.portfolio.service;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.joy.portfolio.constants.PortfolioURL;
 import com.joy.portfolio.dto.LoginDto;
+import com.joy.portfolio.dto.LoginResponseDto;
 import com.joy.portfolio.dto.RegisterDto;
 import com.joy.portfolio.entity.User;
 import com.joy.portfolio.repository.UserRepository;
@@ -19,15 +21,17 @@ public class UserAuthService {
 
 	private final AuthenticationManager authenticationManager;
 
+	private final JWTService jwtService;
+
 	public UserAuthService(UserRepository userRepository, AuthenticationManager authenticationManager,
-			PasswordEncoder passwordEncoder) {
+			PasswordEncoder passwordEncoder, JWTService jwtService) {
 		this.authenticationManager = authenticationManager;
 		this.userRepository = userRepository;
 		this.passwordEncoder = passwordEncoder;
+		this.jwtService = jwtService;
 	}
 
 	public void register(RegisterDto registerDto) {
-		System.out.println("Reached User service");
 		User user = new User();
 		user.setFirstName(registerDto.getFirstName());
 		user.setLastName(registerDto.getLastName());
@@ -37,12 +41,15 @@ public class UserAuthService {
 		user.setPortfolioUrl(PortfolioURL.url + registerDto.getUsername());
 		userRepository.save(user);
 	}
-	
-	public User login(LoginDto loginDto) {
-		authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(loginDto.getCredential(), loginDto.getPassword()));
 
-		return userRepository.findByEmailId(loginDto.getCredential())
-				.orElse(userRepository.findByUsername(loginDto.getCredential()).orElseThrow());
+	public LoginResponseDto login(LoginDto loginDto) {
+		Authentication authentication = authenticationManager.authenticate(
+				new UsernamePasswordAuthenticationToken(loginDto.getCredential(), loginDto.getPassword()));
+		User user = (User) authentication.getPrincipal();
+
+		String jwtToken = jwtService.generateToken(user);
+		user.setToken(jwtToken);
+		userRepository.save(user);
+		return new LoginResponseDto(user.getId(), jwtToken, jwtService.getExpirationTime());
 	}
 }
