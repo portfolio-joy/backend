@@ -1,34 +1,51 @@
 package com.joy.portfolio.exception;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import jakarta.validation.ConstraintViolationException;
-import jakarta.validation.ValidationException;
-
 @ControllerAdvice
 public class UserGlobalExceptionHandler {
 	
-	@ExceptionHandler(value = ConstraintViolationException.class) 
-	public @ResponseBody ResponseEntity<String> handleConstraintViolationException(ConstraintViolationException constraintViolationException){
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(constraintViolationException.getMessage().split("\\r")[0]);
+	@ExceptionHandler(value = DataIntegrityViolationException.class)
+	public @ResponseBody ResponseEntity<Map<String, String>> handleDataIntegrityViolationException(
+			DataIntegrityViolationException dataIntegrityViolationException) {
+		String exceptionMessage = dataIntegrityViolationException.getRootCause().getMessage();
+		Map<String, String> exceptionMap = new HashMap<>();
+		if (exceptionMessage.contains("email_id")) {
+			exceptionMap.put("emailId", "Email Id already exists");
+		} else if (exceptionMessage.contains("username")) {
+			exceptionMap.put("username", "Username already exists");
+		} else {
+			exceptionMap.put("general", exceptionMessage);
+		}
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionMap);
 	}
-	
-	@ExceptionHandler(value = ValidationException.class)
-	public @ResponseBody ResponseEntity<String> handleValidationException(ValidationException validationException) {
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(validationException.getMessage().split("\\r")[0]);
+
+	@ExceptionHandler(value = MethodArgumentNotValidException.class)
+	public @ResponseBody ResponseEntity<Map<String, String>> handleMethodArgumentNotValidException(
+			MethodArgumentNotValidException methodArgumentNotValidException) {
+		List<FieldError> fieldErrors = methodArgumentNotValidException.getFieldErrors();
+		Map<String, String> exceptionMap = new HashMap<>();
+		for (FieldError fieldError : fieldErrors) {
+			exceptionMap.put(fieldError.getField(), fieldError.getDefaultMessage());
+		}
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionMap);
 	}
-	
-	@ExceptionHandler(value = NullPointerException.class)
-	public @ResponseBody ResponseEntity<String> handleNullPointerException(NullPointerException nullPointerException) {
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(nullPointerException.getMessage().split("\\r")[0]);
-	}
-	
+
 	@ExceptionHandler(value = Exception.class)
-	public @ResponseBody ResponseEntity<String> handleException(Exception exception) {
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage().split("\\r")[0]);
+	public @ResponseBody ResponseEntity<Map<String, String>> handleException(Exception exception) {
+		Map<String, String> exceptionMap = new HashMap<>();
+		exceptionMap.put("general", exception.getMessage().split("\\r")[0]);
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionMap);
 	}
 }
