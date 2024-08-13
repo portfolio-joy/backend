@@ -1,4 +1,4 @@
-package com.portfolio.joy.configs;
+package com.joy.portfolio.configs;
 
 import java.util.List;
 
