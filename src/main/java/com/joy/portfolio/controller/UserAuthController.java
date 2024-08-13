@@ -33,6 +33,7 @@ public class UserAuthController {
     @PostMapping("/login")
     public @ResponseBody ResponseEntity<LoginResponseDto> login(@Valid @RequestBody LoginDto loginDto)
     {
+    	System.out.println(loginDto);
     	return ResponseEntity.ok(userAuthService.login(loginDto));
     }
 }
