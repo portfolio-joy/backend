@@ -25,7 +25,7 @@ public class SecurityConfiguration {
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**").allowedOrigins("http://localhost:3000")
+				registry.addMapping("/**").allowedOrigins("http://localhost:3000", "http://localhost:8080")
 						.allowedMethods("GET", "POST", "PUT", "DELETE").allowedHeaders("*");
 			}
 		};
@@ -34,9 +34,9 @@ public class SecurityConfiguration {
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.csrf(csrf -> csrf.disable())
-				.authorizeHttpRequests(auth -> auth.requestMatchers("/auth/register/**").permitAll()
+				.authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**").permitAll()
 						.requestMatchers("/swagger-ui/**").permitAll().requestMatchers("/v3/api-docs/**").permitAll()
-						.requestMatchers("/register").permitAll().anyRequest().authenticated())
+						.anyRequest().authenticated())
 				.sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authenticationProvider(authenticationProvider);
 

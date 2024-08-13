@@ -1,10 +1,12 @@
 package com.joy.portfolio.service;
 
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.joy.portfolio.constants.PortfolioURL;
+import com.joy.portfolio.dto.LoginDto;
 import com.joy.portfolio.dto.RegisterDto;
 import com.joy.portfolio.entity.User;
 import com.joy.portfolio.repository.UserRepository;
@@ -24,7 +26,7 @@ public class UserAuthService {
 		this.passwordEncoder = passwordEncoder;
 	}
 
-	public User register(RegisterDto registerDto) {
+	public void register(RegisterDto registerDto) {
 		System.out.println("Reached User service");
 		User user = new User();
 		user.setFirstName(registerDto.getFirstName());
@@ -33,6 +35,14 @@ public class UserAuthService {
 		user.setEmailId(registerDto.getEmailId());
 		user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
 		user.setPortfolioUrl(PortfolioURL.url + registerDto.getUsername());
-		return userRepository.save(user);
+		userRepository.save(user);
+	}
+	
+	public User login(LoginDto loginDto) {
+		authenticationManager.authenticate(
+				new UsernamePasswordAuthenticationToken(loginDto.getCredential(), loginDto.getPassword()));
+
+		return userRepository.findByEmailId(loginDto.getCredential())
+				.orElse(userRepository.findByUsername(loginDto.getCredential()).orElseThrow());
 	}
 }
