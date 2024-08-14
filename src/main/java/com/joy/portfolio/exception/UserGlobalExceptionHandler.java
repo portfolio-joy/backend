@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -43,10 +44,22 @@ public class UserGlobalExceptionHandler {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionMap);
 	}
 	
+	@ExceptionHandler(value = InternalAuthenticationServiceException.class)
+	public @ResponseBody ResponseEntity<Map<String,String>> handleInternalAuthenticationServiceException(InternalAuthenticationServiceException authenticationException) {
+		Map<String,String> exceptionMap = new HashMap<>();
+		System.out.println(authenticationException.getClass().getSimpleName());
+		exceptionMap.put("general", authenticationException.getMessage());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionMap);
+	}
+	
 	@ExceptionHandler(value = AuthenticationException.class)
 	public @ResponseBody ResponseEntity<Map<String,String>> handleAuthenticationException(AuthenticationException authenticationException) {
 		Map<String,String> exceptionMap = new HashMap<>();
-		exceptionMap.put("general", authenticationException.getMessage());
+		if(authenticationException.getClass().getSimpleName().equals("BadCredentialsException"))
+		{
+			exceptionMap.put("general", "Invalid Credentials");
+		}
+		else exceptionMap.put("general", authenticationException.getMessage());
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionMap);
 	}
 	
