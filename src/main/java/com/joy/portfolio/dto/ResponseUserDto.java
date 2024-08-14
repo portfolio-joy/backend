@@ -11,6 +11,11 @@ import com.joy.portfolio.entity.Skill;
 import com.joy.portfolio.entity.SocialMedia;
 import com.joy.portfolio.entity.Testimonial;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+@Data
+@AllArgsConstructor
 public class ResponseUserDto {
 	
 	@JsonProperty("id")
@@ -21,9 +26,6 @@ public class ResponseUserDto {
 
 	@JsonProperty("lastName")
 	String lastName;
-
-	@JsonProperty("age")
-	int age;
 
 	@JsonProperty("emailId")
 	String emailId;
