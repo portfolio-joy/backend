@@ -18,35 +18,44 @@ import com.joy.portfolio.util.ImageUtil;
 
 @Service
 public class UserService {
-	
+
 	@Autowired
 	UserRepository userRepository;
-	
+
 	@Autowired
 	AboutMeRepository aboutMeRepository;
-	
+
 	@Autowired
 	ImageRepository imageRepository;
-	
+
 	public ResponseUserDto getUser(String id) {
-		User user = userRepository.findById(id).orElseThrow(()->new RuntimeException("Invalid User Id"));
-		ResponseUserDto responseUserDto = new ResponseUserDto(user.getId(),user.getFirstName(),user.getLastName(),user.getEmailId(),user.getUsername(),user.getPortfolioUrl(),user.getToken(),user.getAboutMe(),user.getAllSkill(),user.getAllProject(),user.getAllTestimonial(),user.getContact(),user.getAllSocialMedia());
+		User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Invalid User Id"));
+		ResponseUserDto responseUserDto = new ResponseUserDto(user.getId(), user.getFirstName(), user.getLastName(),
+				user.getEmailId(), user.getUsername(), user.getPortfolioUrl(), user.getToken(), user.getAboutMe(),
+				user.getAllSkill(), user.getAllProject(), user.getAllTestimonial(), user.getContact(),
+				user.getAllSocialMedia());
 		return responseUserDto;
 	}
-	
-	public AboutMe addAboutMe(AboutMeDto aboutMeDto) throws IOException{
+
+	public AboutMe addAboutMe(AboutMeDto aboutMeDto) throws IOException {
 		MultipartFile profile = aboutMeDto.getProfile();
-		if(! profile.getContentType().startsWith("image/"))
-		{
-			throw new IllegalArgumentException("Invalid file type : "+profile.getContentType());
+		if (!profile.getContentType().startsWith("image/")) {
+			throw new IllegalArgumentException("Invalid file type : " + profile.getContentType());
 		}
-		Image profileImage = new Image(profile.getOriginalFilename(),profile.getContentType(),ImageUtil.compressImage(profile.getBytes());
+		Image profileImage = new Image(profile.getOriginalFilename(), profile.getContentType(),
+				ImageUtil.compressImage(profile.getBytes()));
+		profileImage = imageRepository.save(profileImage);
 		AboutMe aboutMe = new AboutMe();
 		aboutMe.setName(aboutMeDto.getName());
 		aboutMe.setSkills(aboutMeDto.getSkills());
 		aboutMe.setDescription(aboutMeDto.getDescription());
 		aboutMe.setProfile(profileImage);
 		aboutMe.setUser(aboutMeDto.getUser());
+		AboutMe aboutMeFromDb = aboutMeRepository.findByUserId(aboutMeDto.getUser().getId()).orElse(null);
+		if (aboutMeFromDb != null) {
+			System.out.println("Reacher aboutMefromDb");
+			aboutMeRepository.delete(aboutMeFromDb);
+		}
 		return aboutMeRepository.save(aboutMe);
 	}
 }

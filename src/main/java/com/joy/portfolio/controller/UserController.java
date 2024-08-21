@@ -38,6 +38,7 @@ public class UserController {
 	public ResponseEntity<AboutMe> addAboutMe(@RequestPart @Valid String aboutMeData, @RequestPart("profile") MultipartFile profile) throws IOException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		AboutMeDto aboutMeDto = new AboutMeDto();
+		System.out.println(aboutMeData);
 		aboutMeDto = objectMapper.readValue(aboutMeData,AboutMeDto.class);
 		aboutMeDto.setProfile(profile);
 		return ResponseEntity.status(HttpStatus.CREATED).body(userService.addAboutMe(aboutMeDto));
