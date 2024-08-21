@@ -19,7 +19,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Entity
@@ -42,8 +41,7 @@ public class User implements UserDetails{
 	@Email
 	String emailId;
 
-	@Column(nullable = false, unique = true)
-	@Size(min=6, max=12)
+	@Column(nullable = false, unique = true, length=16)
 	String username;
 
 	@Column(nullable = false)

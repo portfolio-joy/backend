@@ -20,20 +20,18 @@ import jakarta.validation.Valid;
 @RequestMapping("/auth")
 @RestController
 public class UserAuthController {
-    
-	@Autowired
-    private UserAuthService userAuthService;
 
-    @PostMapping("/register")
-    public @ResponseBody ResponseEntity<ResponseUserDto> register(@Valid @RequestBody RegisterDto registerDto) {
-        userAuthService.register(registerDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(null);
-    }
-    
-    @PostMapping("/login")
-    public @ResponseBody ResponseEntity<LoginResponseDto> login(@Valid @RequestBody LoginDto loginDto)
-    {
-    	System.out.println(loginDto);
-    	return ResponseEntity.ok(userAuthService.login(loginDto));
-    }
+	@Autowired
+	private UserAuthService userAuthService;
+
+	@PostMapping("/register")
+	public @ResponseBody ResponseEntity<ResponseUserDto> register(@RequestBody @Valid RegisterDto registerDto) {
+		userAuthService.register(registerDto);
+		return ResponseEntity.status(HttpStatus.CREATED).body(null);
+	}
+	
+	@PostMapping("/login")
+	public @ResponseBody ResponseEntity<LoginResponseDto> login(@RequestBody @Valid LoginDto loginDto) {
+		return ResponseEntity.ok(userAuthService.login(loginDto));
+	}
 }

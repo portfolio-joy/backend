@@ -5,6 +5,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.joy.portfolio.constants.PortfolioURL;
 import com.joy.portfolio.dto.LoginDto;
@@ -31,6 +32,7 @@ public class UserAuthService {
 		this.jwtService = jwtService;
 	}
 
+	@Transactional
 	public void register(RegisterDto registerDto) {
 		User user = new User();
 		user.setFirstName(registerDto.getFirstName());
@@ -39,7 +41,8 @@ public class UserAuthService {
 		user.setEmailId(registerDto.getEmailId());
 		user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
 		user.setPortfolioUrl(PortfolioURL.url + registerDto.getUsername());
-		userRepository.save(user);
+		User userFromDb = userRepository.save(user);
+		System.out.println(userFromDb);
 	}
 
 	public LoginResponseDto login(LoginDto loginDto) {
@@ -50,6 +53,6 @@ public class UserAuthService {
 		String jwtToken = jwtService.generateToken(user);
 		user.setToken(jwtToken);
 		userRepository.save(user);
-		return new LoginResponseDto(user.getId(), jwtToken, jwtService.getExpirationTime());
+		return new LoginResponseDto(user.getId(), jwtToken, jwtService.getExpirationTime(jwtToken));
 	}
 }

@@ -18,8 +18,11 @@ public class AboutMe {
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;
-
+	
 	@Column(nullable = false)
+	private String name;
+	
+	@Column(nullable = false, length=600)
 	private String description;
 
 	@Column

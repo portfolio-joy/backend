@@ -62,6 +62,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
 			filterChain.doFilter(request, response);
 		} catch (Exception exception) {
+			System.out.println("Reached internal filter");
 			handlerExceptionResolver.resolveException(request, response, null, exception);
 			return;
 		}
