@@ -50,8 +50,8 @@ public class JWTService {
         return buildToken(extraClaims, userDetails, expirationTime);
     }
 
-    public long getExpirationTime() {
-        return expirationTime;
+    public Date getExpirationTime(String jwtToken) {
+        return extractExpiration(jwtToken);
     }
 
     private String buildToken(

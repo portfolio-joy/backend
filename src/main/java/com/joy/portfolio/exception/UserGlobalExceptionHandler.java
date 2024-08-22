@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+
 @ControllerAdvice
 public class UserGlobalExceptionHandler {
 	
@@ -61,6 +64,20 @@ public class UserGlobalExceptionHandler {
 		}
 		else exceptionMap.put("general", authenticationException.getMessage());
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionMap);
+	}
+	
+	@ExceptionHandler(value = MalformedJwtException.class)
+	public @ResponseBody ResponseEntity<Map<String,String>> handleMalformedJwtException(MalformedJwtException malformedJwtException) {
+		Map<String,String> exceptionMap = new HashMap<>();
+		exceptionMap.put("general", "Session Expired");
+		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(exceptionMap);
+	}
+	
+	@ExceptionHandler(value = ExpiredJwtException.class)
+	public @ResponseBody ResponseEntity<Map<String,String>> handleExpiredJwtException(ExpiredJwtException expiredJwtException) {
+		Map<String,String> exceptionMap = new HashMap<>();
+		exceptionMap.put("general", "Session Expired");
+		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(exceptionMap);
 	}
 	
 	@ExceptionHandler(value = Exception.class)
