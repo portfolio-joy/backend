@@ -14,13 +14,11 @@ public class AboutMeDto {
 	@JsonIgnore
 	private String id;
 	
-	@NotNull
+	
 	private String name;
 	
-	@NotNull
 	private String description;
 
-	@NotNull
 	private String skills;
 	
 	@JsonIgnore
