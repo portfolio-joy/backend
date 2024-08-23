@@ -8,11 +8,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.joy.portfolio.dto.AboutMeDto;
 import com.joy.portfolio.dto.ResponseUserDto;
+import com.joy.portfolio.dto.SkillDto;
 import com.joy.portfolio.entity.AboutMe;
 import com.joy.portfolio.entity.Image;
+import com.joy.portfolio.entity.Skill;
 import com.joy.portfolio.entity.User;
 import com.joy.portfolio.repository.AboutMeRepository;
 import com.joy.portfolio.repository.ImageRepository;
+import com.joy.portfolio.repository.SkillRepository;
 import com.joy.portfolio.repository.UserRepository;
 import com.joy.portfolio.util.ImageUtil;
 
@@ -24,6 +27,9 @@ public class UserService {
 
 	@Autowired
 	AboutMeRepository aboutMeRepository;
+	
+	@Autowired
+	SkillRepository skillRepository;
 
 	@Autowired
 	ImageRepository imageRepository;
@@ -65,8 +71,7 @@ public class UserService {
 
 	public AboutMe updateAboutMe(String id, AboutMeDto aboutMeDto) throws IOException {
 		AboutMe aboutMe = aboutMeRepository.findById(id).orElse(null);
-		String profileId = aboutMe.getProfile().getId();
-		imageRepository.deleteById(profileId);
+		String oldProfileId = aboutMe.getProfile().getId();
 		MultipartFile profile = aboutMeDto.getProfile();
 		if (!profile.getContentType().startsWith("image/")) {
 			throw new IllegalArgumentException("Invalid file type : " + profile.getContentType());
@@ -81,6 +86,22 @@ public class UserService {
 		aboutMe.setDescription(aboutMeDto.getDescription());
 		aboutMe.setProfile(profileImage);
 		aboutMe.setUser(userRepository.findById(aboutMeDto.getUser().getId()).orElse(null));
-		return aboutMeRepository.save(aboutMe);
+		aboutMe = aboutMeRepository.save(aboutMe);
+		imageRepository.deleteById(oldProfileId);
+		return aboutMe;
+	}
+
+	public Skill addSkill(SkillDto skillDto) {
+		Skill skill = new Skill(skillDto.getName(),skillDto.getType(),skillDto.getProficiency(),skillDto.getDescription(),skillDto.getUser());
+		return skillRepository.save(skill);
+	}
+	
+	public Skill updateSkill(String id, SkillDto skillDto) {
+		Skill skill = new Skill(id,skillDto.getName(),skillDto.getType(),skillDto.getProficiency(),skillDto.getDescription(),skillDto.getUser());
+		return skillRepository.save(skill);
+	}
+	
+	public void removeSkill(String id) {
+		skillRepository.deleteById(id);
 	}
 }

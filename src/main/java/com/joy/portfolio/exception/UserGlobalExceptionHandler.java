@@ -69,7 +69,7 @@ public class UserGlobalExceptionHandler {
 	@ExceptionHandler(value = MalformedJwtException.class)
 	public @ResponseBody ResponseEntity<Map<String,String>> handleMalformedJwtException(MalformedJwtException malformedJwtException) {
 		Map<String,String> exceptionMap = new HashMap<>();
-		exceptionMap.put("general", "Session Expired");
+		exceptionMap.put("general", "Malformed JWT token");
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(exceptionMap);
 	}
 	
