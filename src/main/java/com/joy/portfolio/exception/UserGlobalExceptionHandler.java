@@ -14,13 +14,15 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
+import jakarta.validation.ConstraintViolationException;
 
 @ControllerAdvice
 public class UserGlobalExceptionHandler {
-	
+
 	@ExceptionHandler(value = DataIntegrityViolationException.class)
 	public @ResponseBody ResponseEntity<Map<String, String>> handleDataIntegrityViolationException(
 			DataIntegrityViolationException dataIntegrityViolationException) {
@@ -46,38 +48,58 @@ public class UserGlobalExceptionHandler {
 		}
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionMap);
 	}
-	
+
+	@ExceptionHandler(ConstraintViolationException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ResponseEntity<Map<String, String>> handleConstraintViolationException(
+			ConstraintViolationException constraintViolationException) {
+		Map<String, String> exceptionMap = new HashMap<>();
+		constraintViolationException.getConstraintViolations()
+				.forEach(violation -> exceptionMap.put(violation.getPropertyPath().toString(), violation.getMessage()));
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionMap);
+	}
+
 	@ExceptionHandler(value = InternalAuthenticationServiceException.class)
-	public @ResponseBody ResponseEntity<Map<String,String>> handleInternalAuthenticationServiceException(InternalAuthenticationServiceException authenticationException) {
-		Map<String,String> exceptionMap = new HashMap<>();
+	public @ResponseBody ResponseEntity<Map<String, String>> handleInternalAuthenticationServiceException(
+			InternalAuthenticationServiceException authenticationException) {
+		Map<String, String> exceptionMap = new HashMap<>();
 		System.out.println(authenticationException.getClass().getSimpleName());
 		exceptionMap.put("general", authenticationException.getMessage());
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionMap);
 	}
-	
+
 	@ExceptionHandler(value = AuthenticationException.class)
-	public @ResponseBody ResponseEntity<Map<String,String>> handleAuthenticationException(AuthenticationException authenticationException) {
-		Map<String,String> exceptionMap = new HashMap<>();
-		if(authenticationException.getClass().getSimpleName().equals("BadCredentialsException"))
-		{
+	public @ResponseBody ResponseEntity<Map<String, String>> handleAuthenticationException(
+			AuthenticationException authenticationException) {
+		Map<String, String> exceptionMap = new HashMap<>();
+		if (authenticationException.getClass().getSimpleName().equals("BadCredentialsException")) {
 			exceptionMap.put("general", "Invalid Credentials");
-		}
-		else exceptionMap.put("general", authenticationException.getMessage());
+		} else
+			exceptionMap.put("general", authenticationException.getMessage());
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionMap);
 	}
-	
+
 	@ExceptionHandler(value = MalformedJwtException.class)
-	public @ResponseBody ResponseEntity<Map<String,String>> handleMalformedJwtException(MalformedJwtException malformedJwtException) {
-		Map<String,String> exceptionMap = new HashMap<>();
+	public @ResponseBody ResponseEntity<Map<String, String>> handleMalformedJwtException(
+			MalformedJwtException malformedJwtException) {
+		Map<String, String> exceptionMap = new HashMap<>();
+		exceptionMap.put("general", "Malformed JWT token");
+		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(exceptionMap);
+	}
+
+	@ExceptionHandler(value = ExpiredJwtException.class)
+	public @ResponseBody ResponseEntity<Map<String, String>> handleExpiredJwtException(
+			ExpiredJwtException expiredJwtException) {
+		Map<String, String> exceptionMap = new HashMap<>();
 		exceptionMap.put("general", "Session Expired");
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(exceptionMap);
 	}
 	
-	@ExceptionHandler(value = ExpiredJwtException.class)
-	public @ResponseBody ResponseEntity<Map<String,String>> handleExpiredJwtException(ExpiredJwtException expiredJwtException) {
+	@ExceptionHandler(value = UserNotFoundException.class)
+	public @ResponseBody ResponseEntity<Map<String,String>> handleUserNotFoundException(UserNotFoundException userNotFoundException) {
 		Map<String,String> exceptionMap = new HashMap<>();
-		exceptionMap.put("general", "Session Expired");
-		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(exceptionMap);
+		exceptionMap.put("general",userNotFoundException.getMessage());
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionMap);
 	}
 	
 	@ExceptionHandler(value = Exception.class)

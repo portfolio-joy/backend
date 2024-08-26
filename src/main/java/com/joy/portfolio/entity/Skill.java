@@ -14,10 +14,14 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Skill {
 
 	@Id
@@ -29,13 +33,16 @@ public class Skill {
 
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
-	private SkillType type;
+	private SkillType skillType;
 
-	@Column(nullable = false)
+	@Column(nullable = false, columnDefinition = "Integer default '1'")
 	@Min(1)
 	@Max(100)
 	private int proficiency;
-
+	
+	@Column(nullable = false, length=600)
+	private String description;
+	
 	@ManyToOne
 	@JoinColumn(name = "user_id", nullable = false)
 	@JsonBackReference(value = "user-skill")

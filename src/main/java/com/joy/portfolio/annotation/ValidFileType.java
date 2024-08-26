@@ -1,21 +1,26 @@
 package com.joy.portfolio.annotation;
 
+import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.joy.portfolio.validator.URLValidator;
+import com.joy.portfolio.validator.FileTypeValidator;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
-@Target({ ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.PARAMETER })
+@Documented
+@Constraint(validatedBy = FileTypeValidator.class)
+@Target({ ElementType.PARAMETER, ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = URLValidator.class)
-public @interface ValidUrl {
-	String message() default "Invalid URL";
+public @interface ValidFileType {
 
+	String message();
+	
+	String fileType();
+	
 	Class<?>[] groups() default {};
 
 	Class<? extends Payload>[] payload() default {};

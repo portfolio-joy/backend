@@ -26,12 +26,12 @@ public class AboutMe {
 	@Column(nullable = false, length=600)
 	private String description;
 
-	@Column
+	@Column(nullable = false)
 	private String skills;
 	
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="profile_id", nullable=false)
-	private Image profile;
+	private Image profile = null;
 	
 	@OneToOne(cascade = CascadeType.REMOVE)
 	@JoinColumn(name = "user_id", nullable = false)

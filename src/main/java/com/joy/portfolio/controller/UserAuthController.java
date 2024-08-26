@@ -3,6 +3,7 @@ package com.joy.portfolio.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,13 +26,15 @@ public class UserAuthController {
 	private UserAuthService userAuthService;
 
 	@PostMapping("/register")
-	public @ResponseBody ResponseEntity<ResponseUserDto> register(@RequestBody @Valid RegisterDto registerDto) {
+	@Transactional
+	public @ResponseBody ResponseEntity<ResponseUserDto> register(@Valid @RequestBody RegisterDto registerDto) {
+		System.out.println(registerDto);
 		userAuthService.register(registerDto);
 		return ResponseEntity.status(HttpStatus.CREATED).body(null);
 	}
 	
 	@PostMapping("/login")
-	public @ResponseBody ResponseEntity<LoginResponseDto> login(@RequestBody @Valid LoginDto loginDto) {
+	public @ResponseBody ResponseEntity<LoginResponseDto> login(@Valid @RequestBody LoginDto loginDto) {
 		return ResponseEntity.ok(userAuthService.login(loginDto));
 	}
 }
