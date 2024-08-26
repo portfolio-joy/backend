@@ -7,8 +7,6 @@ import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.joy.portfolio.annotation.ValidPassword;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -45,7 +43,6 @@ public class User implements UserDetails{
 	String username;
 
 	@Column(nullable = false)
-	@ValidPassword
 	String password;
 	
 	@Column(nullable = false)
@@ -55,7 +52,7 @@ public class User implements UserDetails{
 	String token;
 	
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private AboutMe aboutMe;
+	private AboutMe aboutMe = null;
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Skill> allSkill = new ArrayList<>();
@@ -67,7 +64,7 @@ public class User implements UserDetails{
 	private List<Testimonial> allTestimonial = new ArrayList<>();
 	
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Contact contact;
+	private Contact contact = null;
 	
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<SocialMedia> allSocialMedia = new ArrayList<>();

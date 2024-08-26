@@ -20,7 +20,7 @@ public class SkillDto {
 
 	@NotNull(message = "Enter valid skill type")
 	@Enumerated(EnumType.STRING)
-	private SkillType type;
+	private SkillType skillType;
 
 	@Min(1)
 	@Max(100)

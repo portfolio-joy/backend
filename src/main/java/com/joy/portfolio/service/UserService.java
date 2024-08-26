@@ -13,6 +13,10 @@ import com.joy.portfolio.entity.AboutMe;
 import com.joy.portfolio.entity.Image;
 import com.joy.portfolio.entity.Skill;
 import com.joy.portfolio.entity.User;
+import com.joy.portfolio.exception.UserNotFoundException;
+import com.joy.portfolio.mapper.AboutMeMapper;
+import com.joy.portfolio.mapper.SkillMapper;
+import com.joy.portfolio.mapper.UserMapper;
 import com.joy.portfolio.repository.AboutMeRepository;
 import com.joy.portfolio.repository.ImageRepository;
 import com.joy.portfolio.repository.SkillRepository;
@@ -33,22 +37,25 @@ public class UserService {
 
 	@Autowired
 	ImageRepository imageRepository;
+	
+	@Autowired
+	UserMapper userMapper;
+	
+	@Autowired
+	AboutMeMapper aboutMeMapper;
+	
+	@Autowired
+	SkillMapper skillMapper;
 
 	public ResponseUserDto getUser(String id) {
-		User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Invalid User Id"));
-		ResponseUserDto responseUserDto = new ResponseUserDto(user.getId(), user.getFirstName(), user.getLastName(),
-				user.getEmailId(), user.getUsername(), user.getPortfolioUrl(), user.getToken(), user.getAboutMe(),
-				user.getAllSkill(), user.getAllProject(), user.getAllTestimonial(), user.getContact(),
-				user.getAllSocialMedia());
+		User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("Invalid User Id"));
+		ResponseUserDto responseUserDto = userMapper.mapUserToDto(user);
 		return responseUserDto;
 	}
 
 	public ResponseUserDto getUserFromUsername(String username) {
-		User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Invalid username"));
-		ResponseUserDto responseUserDto = new ResponseUserDto(user.getId(), user.getFirstName(), user.getLastName(),
-				user.getEmailId(), user.getUsername(), user.getPortfolioUrl(), user.getToken(), user.getAboutMe(),
-				user.getAllSkill(), user.getAllProject(), user.getAllTestimonial(), user.getContact(),
-				user.getAllSocialMedia());
+		User user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("Invalid username"));
+		ResponseUserDto responseUserDto = userMapper.mapUserToDto(user);
 		return responseUserDto;
 	}
 
@@ -60,12 +67,8 @@ public class UserService {
 		Image profileImage = new Image(profile.getOriginalFilename(), profile.getContentType(),
 				ImageUtil.compressImage(profile.getBytes()));
 		profileImage = imageRepository.save(profileImage);
-		AboutMe aboutMe = new AboutMe();
-		aboutMe.setName(aboutMeDto.getName());
-		aboutMe.setSkills(aboutMeDto.getSkills());
-		aboutMe.setDescription(aboutMeDto.getDescription());
+		AboutMe aboutMe = aboutMeMapper.mapDtoToAboutMe(aboutMeDto);
 		aboutMe.setProfile(profileImage);
-		aboutMe.setUser(aboutMeDto.getUser());
 		return aboutMeRepository.save(aboutMe);
 	}
 
@@ -73,17 +76,12 @@ public class UserService {
 		AboutMe aboutMe = aboutMeRepository.findById(id).orElse(null);
 		String oldProfileId = aboutMe.getProfile().getId();
 		MultipartFile profile = aboutMeDto.getProfile();
-		if (!profile.getContentType().startsWith("image/")) {
-			throw new IllegalArgumentException("Invalid file type : " + profile.getContentType());
-		}
 		Image profileImage = new Image(profile.getOriginalFilename(), profile.getContentType(),
 				ImageUtil.compressImage(profile.getBytes()));
 		profileImage = imageRepository.save(profileImage);
 		profileImage.setImageData(ImageUtil.decompressImage(profileImage.getImageData()));
+		aboutMe = aboutMeMapper.mapDtoToAboutMe(aboutMeDto);
 		aboutMe.setId(id);
-		aboutMe.setName(aboutMeDto.getName());
-		aboutMe.setSkills(aboutMeDto.getSkills());
-		aboutMe.setDescription(aboutMeDto.getDescription());
 		aboutMe.setProfile(profileImage);
 		aboutMe.setUser(userRepository.findById(aboutMeDto.getUser().getId()).orElse(null));
 		aboutMe = aboutMeRepository.save(aboutMe);
@@ -92,12 +90,13 @@ public class UserService {
 	}
 
 	public Skill addSkill(SkillDto skillDto) {
-		Skill skill = new Skill(skillDto.getName(),skillDto.getType(),skillDto.getProficiency(),skillDto.getDescription(),skillDto.getUser());
+		Skill skill = skillMapper.mapDtoToSkill(skillDto);
 		return skillRepository.save(skill);
 	}
 	
 	public Skill updateSkill(String id, SkillDto skillDto) {
-		Skill skill = new Skill(id,skillDto.getName(),skillDto.getType(),skillDto.getProficiency(),skillDto.getDescription(),skillDto.getUser());
+		Skill skill = skillMapper.mapDtoToSkill(skillDto);
+		skill.setId(id);
 		return skillRepository.save(skill);
 	}
 	
