@@ -16,10 +16,12 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class Skill {
 
 	@Id
@@ -31,7 +33,7 @@ public class Skill {
 
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
-	private SkillType type;
+	private SkillType skillType;
 
 	@Column(nullable = false, columnDefinition = "Integer default '1'")
 	@Min(1)
@@ -45,11 +47,4 @@ public class Skill {
 	@JoinColumn(name = "user_id", nullable = false)
 	@JsonBackReference(value = "user-skill")
 	private User user;
-	
-	public Skill(String name, SkillType skillType, int proficiency, String description, User user) {
-		this.name = name;
-		this.type = skillType;
-		this.proficiency = proficiency;
-		this.user = user;
-	}
 }
