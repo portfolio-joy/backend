@@ -1,6 +1,7 @@
 package com.joy.portfolio.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +17,7 @@ import com.joy.portfolio.dto.RegisterDto;
 import com.joy.portfolio.dto.ResponseUserDto;
 import com.joy.portfolio.service.UserAuthService;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
 @RequestMapping("/auth")
@@ -24,6 +26,9 @@ public class UserAuthController {
 
 	@Autowired
 	private UserAuthService userAuthService;
+	
+	@Value("${security.jwt.cookie-expiry}")
+	private int cookieExpiry;
 
 	@PostMapping("/register")
 	@Transactional
@@ -34,7 +39,8 @@ public class UserAuthController {
 	}
 	
 	@PostMapping("/login")
-	public @ResponseBody ResponseEntity<LoginResponseDto> login(@Valid @RequestBody LoginDto loginDto) {
-		return ResponseEntity.ok(userAuthService.login(loginDto));
+	public @ResponseBody ResponseEntity<LoginResponseDto> login(@Valid @RequestBody LoginDto loginDto, HttpServletResponse response) {
+		LoginResponseDto loginResponseDto = userAuthService.login(loginDto);
+		return ResponseEntity.ok(loginResponseDto);
 	}
 }
