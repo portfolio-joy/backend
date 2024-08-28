@@ -15,7 +15,7 @@ import jakarta.validation.Payload;
 @Constraint(validatedBy = FileTypeValidator.class)
 @Target({ ElementType.PARAMETER, ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ValidFileType {
+public @interface ValidFile {
 
 	String message();
 	
