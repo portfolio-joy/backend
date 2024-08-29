@@ -27,7 +27,7 @@ public class UserGlobalExceptionHandler {
 	@ExceptionHandler(value = DataIntegrityViolationException.class)
 	public @ResponseBody ResponseEntity<Map<String, String>> handleDataIntegrityViolationException(
 			DataIntegrityViolationException dataIntegrityViolationException) {
-		String exceptionMessage = dataIntegrityViolationException.getRootCause().getMessage();
+		String exceptionMessage = dataIntegrityViolationException.getMessage();
 		Map<String, String> exceptionMap = new HashMap<>();
 		System.out.println(exceptionMessage);
 		if (exceptionMessage.matches("Duplicate entry .* for key 'user.email_id'")) {
@@ -35,6 +35,8 @@ public class UserGlobalExceptionHandler {
 			exceptionMap.put("emailId", "Email Id already exists");
 		} else if (exceptionMessage.matches("Duplicate entry '.*' for key 'user.username'")) {
 			exceptionMap.put("username", "Username already exists");
+		} else if (exceptionMessage.matches("Duplicate entry '.*' for key 'project.name'")) {
+			exceptionMap.put("name", "Project Name already exists");
 		} else {
 			exceptionMap.put("general", exceptionMessage);
 		}
@@ -97,18 +99,18 @@ public class UserGlobalExceptionHandler {
 		exceptionMap.put("general", "Session Expired");
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(exceptionMap);
 	}
-	
+
 	@ExceptionHandler(value = EntityNotFoundException.class)
-	public @ResponseBody ResponseEntity<Map<String,String>> handleUserNotFoundException(EntityNotFoundException entityNotFoundException) {
-		Map<String,String> exceptionMap = new HashMap<>();
-		exceptionMap.put("general",entityNotFoundException.getMessage());
+	public @ResponseBody ResponseEntity<Map<String, String>> handleUserNotFoundException(
+			EntityNotFoundException entityNotFoundException) {
+		Map<String, String> exceptionMap = new HashMap<>();
+		exceptionMap.put("general", entityNotFoundException.getMessage());
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionMap);
 	}
-	
+
 	@ExceptionHandler(value = Exception.class)
 	public @ResponseBody ResponseEntity<Map<String, String>> handleException(Exception exception) {
 		Map<String, String> exceptionMap = new HashMap<>();
-		System.out.println("Reached Exception : "+exception.getMessage());
 		exceptionMap.put("general", exception.getMessage());
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionMap);
 	}
