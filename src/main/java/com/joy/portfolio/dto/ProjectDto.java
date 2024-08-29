@@ -4,9 +4,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.joy.portfolio.annotation.ValidFile;
+import com.joy.portfolio.entity.User;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
@@ -23,4 +25,7 @@ public class ProjectDto {
 	@JsonIgnore
 	@ValidFile(fileType = "image/", message = "Invalid Image Type or Image size is larger than 10 MB")
 	private MultipartFile image;
+	
+	@NotNull
+	private User user;
 }

@@ -13,6 +13,8 @@ import com.joy.portfolio.mapper.AboutMeMapper;
 import com.joy.portfolio.repository.AboutMeRepository;
 import com.joy.portfolio.repository.ImageRepository;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @Service
 public class AboutMeService {
 
@@ -35,7 +37,7 @@ public class AboutMeService {
 	}
 
 	public AboutMe updateAboutMe(String id, AboutMeDto aboutMeDto) throws IOException {
-		AboutMe aboutMe = aboutMeRepository.findById(id).orElse(null);
+		AboutMe aboutMe = aboutMeRepository.findById(id).orElseThrow(()->new EntityNotFoundException("AboutMe Not Found"));
 		String oldProfileId = aboutMe.getProfile().getId();
 		MultipartFile profile = aboutMeDto.getProfile();
 		Image profileImage = new Image(profile.getOriginalFilename(), profile.getContentType(), profile.getBytes());

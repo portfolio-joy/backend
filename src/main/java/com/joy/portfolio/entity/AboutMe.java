@@ -33,7 +33,7 @@ public class AboutMe {
 	@JoinColumn(name="profile_id", nullable=false)
 	private Image profile = null;
 	
-	@OneToOne(cascade = CascadeType.REMOVE)
+	@OneToOne
 	@JoinColumn(name = "user_id", nullable = false)
 	@JsonBackReference(value = "user-aboutMe")
 	private User user;

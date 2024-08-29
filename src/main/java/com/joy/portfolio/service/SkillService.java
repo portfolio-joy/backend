@@ -8,6 +8,8 @@ import com.joy.portfolio.entity.Skill;
 import com.joy.portfolio.mapper.SkillMapper;
 import com.joy.portfolio.repository.SkillRepository;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @Service
 public class SkillService {
 	
@@ -23,12 +25,14 @@ public class SkillService {
 	}
 
 	public Skill updateSkill(String id, SkillDto skillDto) {
+		if(!skillRepository.existsById(id)) throw new EntityNotFoundException("Skill Not Found");
 		Skill skill = skillMapper.mapDtoToSkill(skillDto);
 		skill.setId(id);
 		return skillRepository.save(skill);
 	}
 
 	public void removeSkill(String id) {
+		if(!skillRepository.existsById(id)) throw new EntityNotFoundException("Skill Not Found");
 		skillRepository.deleteById(id);
 	}
 }
