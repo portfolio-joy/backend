@@ -32,13 +32,13 @@ public class Project {
 	@Column(nullable = false, length=300)
 	private String briefDetail;
 	
-	@OneToOne
+	@OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
 	@JoinColumn(name="image_id")
 	private Image image;
 
 	@ManyToOne
 	@JoinColumn(name = "user_id", nullable = false)
-	@JsonBackReference(value = "user-projects")
+	@JsonBackReference(value = "user-project")
 	private User user;
 
 	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.EAGER)

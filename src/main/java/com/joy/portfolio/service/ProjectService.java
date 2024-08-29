@@ -13,6 +13,8 @@ import com.joy.portfolio.mapper.ProjectMapper;
 import com.joy.portfolio.repository.ImageRepository;
 import com.joy.portfolio.repository.ProjectRepository;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @Service
 public class ProjectService {
 
@@ -30,12 +32,13 @@ public class ProjectService {
 		Image projectImage = new Image(image.getOriginalFilename(), image.getContentType(), image.getBytes());
 		projectImage = imageRepository.save(projectImage);
 		Project project = projectMapper.mapDtoToProject(projectDto);
+		System.out.println(project);
 		project.setImage(projectImage);
 		return projectRepository.save(project);
 	}
 	
 	public Project updateProject(String id, ProjectDto projectDto) throws IOException {
-		Project project = projectRepository.findById(id).orElse(null);
+		Project project = projectRepository.findById(id).orElseThrow(()->new EntityNotFoundException("Project Not Found"));
 		String oldImageId = project.getImage().getId();
 		MultipartFile image = projectDto.getImage();
 		Image projectImage = new Image(image.getOriginalFilename(), image.getContentType(), image.getBytes()); 
@@ -49,7 +52,7 @@ public class ProjectService {
 	}
 	
 	public void removeProject(String id) {
-		Project project = projectRepository.findById(id).orElse(null);
-		imageRepository.delete(project.getImage());
+		if(!projectRepository.existsById(id)) throw new EntityNotFoundException("Project Not Found");
+		projectRepository.deleteById(id);
 	}
 }

@@ -1,7 +1,6 @@
 package com.joy.portfolio.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,9 +25,6 @@ public class UserAuthController {
 
 	@Autowired
 	private UserAuthService userAuthService;
-	
-	@Value("${security.jwt.cookie-expiry}")
-	private int cookieExpiry;
 
 	@PostMapping("/register")
 	@Transactional

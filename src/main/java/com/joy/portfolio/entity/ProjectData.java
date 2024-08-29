@@ -2,6 +2,7 @@ package com.joy.portfolio.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,7 +31,7 @@ public class ProjectData {
 	@JoinColumn(name="image_id")
 	private Image image;
 
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "project_id", nullable = false)
 	@JsonBackReference(value = "project-projectData")
 	private Project project;
