@@ -51,6 +51,6 @@ public class AboutMeController {
 		AboutMeDto aboutMeDto = objectMapper.readValue(aboutMeData, AboutMeDto.class);
 		aboutMeDto.setProfile(profile);
 		dtoValidator.validate(aboutMeDto);
-		return ResponseEntity.status(HttpStatus.CREATED).body(aboutMeService.updateAboutMe(id, aboutMeDto));
+		return ResponseEntity.status(HttpStatus.OK).body(aboutMeService.updateAboutMe(id, aboutMeDto));
 	}
 }

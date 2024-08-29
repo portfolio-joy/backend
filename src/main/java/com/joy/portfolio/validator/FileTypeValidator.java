@@ -2,23 +2,24 @@ package com.joy.portfolio.validator;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.joy.portfolio.annotation.ValidFileType;
+import com.joy.portfolio.annotation.ValidFile;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class FileTypeValidator implements ConstraintValidator<ValidFileType, MultipartFile> {
+public class FileTypeValidator implements ConstraintValidator<ValidFile, MultipartFile> {
 	
 	private String fileType;
+	private final long MAX_FILE_SIZE = 10485760;
 	
 	@Override
-	public void initialize(ValidFileType validFileType) {
-		this.fileType = validFileType.fileType();
+	public void initialize(ValidFile validFile) {
+		this.fileType = validFile.fileType();
 	}
 
 	@Override
 	public boolean isValid(MultipartFile file, ConstraintValidatorContext context) {
-		return file.getContentType() != null && file.getContentType().startsWith(fileType);
+		return file.getContentType() != null && file.getContentType().startsWith(fileType) && file.getSize()<=MAX_FILE_SIZE;
 	}
 
 }

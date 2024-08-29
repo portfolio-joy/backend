@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 
 @ControllerAdvice
@@ -28,9 +29,11 @@ public class UserGlobalExceptionHandler {
 			DataIntegrityViolationException dataIntegrityViolationException) {
 		String exceptionMessage = dataIntegrityViolationException.getRootCause().getMessage();
 		Map<String, String> exceptionMap = new HashMap<>();
-		if (exceptionMessage.contains("email_id")) {
+		System.out.println(exceptionMessage);
+		if (exceptionMessage.matches("Duplicate entry .* for key 'user.email_id'")) {
+			System.out.println("Matched email");
 			exceptionMap.put("emailId", "Email Id already exists");
-		} else if (exceptionMessage.contains("username")) {
+		} else if (exceptionMessage.matches("Duplicate entry '.*' for key 'user.username'")) {
 			exceptionMap.put("username", "Username already exists");
 		} else {
 			exceptionMap.put("general", exceptionMessage);
@@ -95,16 +98,17 @@ public class UserGlobalExceptionHandler {
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(exceptionMap);
 	}
 	
-	@ExceptionHandler(value = UserNotFoundException.class)
-	public @ResponseBody ResponseEntity<Map<String,String>> handleUserNotFoundException(UserNotFoundException userNotFoundException) {
+	@ExceptionHandler(value = EntityNotFoundException.class)
+	public @ResponseBody ResponseEntity<Map<String,String>> handleUserNotFoundException(EntityNotFoundException entityNotFoundException) {
 		Map<String,String> exceptionMap = new HashMap<>();
-		exceptionMap.put("general",userNotFoundException.getMessage());
+		exceptionMap.put("general",entityNotFoundException.getMessage());
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionMap);
 	}
 	
 	@ExceptionHandler(value = Exception.class)
 	public @ResponseBody ResponseEntity<Map<String, String>> handleException(Exception exception) {
 		Map<String, String> exceptionMap = new HashMap<>();
+		System.out.println("Reached Exception : "+exception.getMessage());
 		exceptionMap.put("general", exception.getMessage());
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionMap);
 	}
