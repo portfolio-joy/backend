@@ -1,5 +1,7 @@
 package com.joy.portfolio.repository;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -7,7 +9,10 @@ import com.joy.portfolio.entity.Project;
 
 public interface ProjectRepository extends JpaRepository<Project, String> {
 
-	@Query("SELECT COUNT(p)>0 FROM Project p WHERE p.name=:name AND p.user.id=:id")
-	boolean existsByName(String name, String id);
+	@Query("SELECT COUNT(project)>0 FROM Project project WHERE project.name=:name AND project.user.id=:userId")
+	boolean existsByName(String name, String userId);
+	
+	@Query("SELECT project.id FROM Project project WHERE project.name=:name AND project.user.username=:username")
+	Optional<String> findProjectIdByUsername(String name, String username);
 
 }

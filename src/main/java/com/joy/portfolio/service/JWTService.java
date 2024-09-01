@@ -19,6 +19,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
 
 @Service
 public class JWTService {
@@ -35,7 +36,12 @@ public class JWTService {
 	public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
-
+	
+	public String extractUserId(HttpServletRequest request) {
+		String token = request.getHeader("Authorization").substring(7);
+		return extractAllClaims(token).get("userId").toString();
+	}
+	
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
