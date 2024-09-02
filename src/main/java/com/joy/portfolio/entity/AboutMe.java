@@ -31,7 +31,7 @@ public class AboutMe {
 	
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="profile_id", nullable=false)
-	private Image profile = null;
+	private Image profile;
 	
 	@OneToOne
 	@JoinColumn(name = "user_id", nullable = false)
