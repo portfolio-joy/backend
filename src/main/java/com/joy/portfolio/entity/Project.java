@@ -42,5 +42,6 @@ public class Project {
 	private User user;
 
 	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JsonBackReference(value = "project-projectData")
 	private List<ProjectData> projectData = new ArrayList<>();
 }
