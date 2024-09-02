@@ -29,9 +29,7 @@ public class UserGlobalExceptionHandler {
 			DataIntegrityViolationException dataIntegrityViolationException) {
 		String exceptionMessage = dataIntegrityViolationException.getMessage();
 		Map<String, String> exceptionMap = new HashMap<>();
-		System.out.println(exceptionMessage);
 		if (exceptionMessage.matches("Duplicate entry .* for key 'user.email_id'")) {
-			System.out.println("Matched email");
 			exceptionMap.put("emailId", "Email Id already exists");
 		} else if (exceptionMessage.matches("Duplicate entry '.*' for key 'user.username'")) {
 			exceptionMap.put("username", "Username already exists");
@@ -68,7 +66,6 @@ public class UserGlobalExceptionHandler {
 	public @ResponseBody ResponseEntity<Map<String, String>> handleInternalAuthenticationServiceException(
 			InternalAuthenticationServiceException authenticationException) {
 		Map<String, String> exceptionMap = new HashMap<>();
-		System.out.println(authenticationException.getClass().getSimpleName());
 		exceptionMap.put("general", authenticationException.getMessage());
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionMap);
 	}
@@ -88,7 +85,7 @@ public class UserGlobalExceptionHandler {
 	public @ResponseBody ResponseEntity<Map<String, String>> handleMalformedJwtException(
 			MalformedJwtException malformedJwtException) {
 		Map<String, String> exceptionMap = new HashMap<>();
-		exceptionMap.put("general", "Malformed JWT token");
+		exceptionMap.put("general", "Session Expired");
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(exceptionMap);
 	}
 

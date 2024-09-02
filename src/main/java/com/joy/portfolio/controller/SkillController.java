@@ -1,5 +1,8 @@
 package com.joy.portfolio.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,8 +38,10 @@ public class SkillController {
 	}
 
 	@DeleteMapping(value = "/skill/{id}")
-	public ResponseEntity<String> removeSkill(@PathVariable("id") String id) {
+	public ResponseEntity<Map<String,String>> removeSkill(@PathVariable("id") String id) {
 		skillService.removeSkill(id);
-		return ResponseEntity.ok(id);
+		Map<String,String> response = new HashMap<String,String>();
+		response.put("id", id);
+		return ResponseEntity.ok(response);
 	}
 }

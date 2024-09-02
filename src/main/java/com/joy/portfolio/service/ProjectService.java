@@ -29,18 +29,16 @@ public class ProjectService {
 	ProjectMapper projectMapper;
 	
 	public Project addProject(ProjectDto projectDto) throws IOException {
-		if(projectRepository.existsByName(projectDto.getName(), projectDto.getUser().getId())) throw new DataIntegrityViolationException("Duplicate entry '\"+projectDto.getName()+\"' for key 'project.name'",new Throwable(""));
+		if(projectRepository.existsByName(projectDto.getName(), projectDto.getUser().getId())) throw new DataIntegrityViolationException("Duplicate entry '"+projectDto.getName()+"' for key 'project.name'",new Throwable(""));
 		MultipartFile image = projectDto.getImage();
 		Image projectImage = new Image(image.getOriginalFilename(), image.getContentType(), image.getBytes());
 		projectImage = imageRepository.save(projectImage);
 		Project project = projectMapper.mapDtoToProject(projectDto);
-		System.out.println(project);
 		project.setImage(projectImage);
 		return projectRepository.save(project);
 	}
 	
 	public Project updateProject(String id, ProjectDto projectDto) throws IOException {
-		if(projectRepository.existsByName(projectDto.getName(), projectDto.getUser().getId())) throw new DataIntegrityViolationException("Duplicate entry '"+projectDto.getName()+"' for key 'project.name'");
 		Project project = projectRepository.findById(id).orElseThrow(()->new EntityNotFoundException("Project Not Found"));
 		String oldImageId = project.getImage().getId();
 		MultipartFile image = projectDto.getImage();

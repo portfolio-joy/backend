@@ -1,5 +1,8 @@
 package com.joy.portfolio.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -46,7 +49,9 @@ public class UserAuthService {
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginDto.getLoginId(), loginDto.getPassword()));
 		User user = (User) authentication.getPrincipal();
-		String jwtToken = jwtService.generateToken(user);
+		Map<String,Object> extraClaims = new HashMap<>();
+		extraClaims.put("userId", user.getId());
+		String jwtToken = jwtService.generateToken(extraClaims,user);
 		user.setToken(jwtToken);
 		user = userRepository.save(user);
 		return new LoginResponseDto(user.getId(), jwtToken, jwtService.getExpirationTime(jwtToken));
