@@ -1,6 +1,8 @@
 package com.joy.portfolio.controller;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -54,8 +56,10 @@ public class ProjectController {
 	}
 	
 	@DeleteMapping(value = "/project/{id}")
-	public ResponseEntity<String> removeProject(@PathVariable("id") String id) {
+	public ResponseEntity<Map<String,String>> removeProject(@PathVariable("id") String id) {
 		projectService.removeProject(id);
-		return ResponseEntity.status(HttpStatus.OK).body(id);
+		Map<String,String> response = new HashMap<String,String>();
+		response.put("id", id);
+		return ResponseEntity.ok(response);
 	}
 }

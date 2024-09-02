@@ -1,5 +1,8 @@
 package com.joy.portfolio.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.CascadeType;
@@ -11,6 +14,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import lombok.Data;
 
@@ -37,6 +41,7 @@ public class Project {
 	@JsonBackReference(value = "user-project")
 	private User user;
 
-//	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-//	private List<ProjectData> projectData = new ArrayList<>();
+	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JsonBackReference(value = "project-projectData")
+	private List<ProjectData> projectData = new ArrayList<>();
 }

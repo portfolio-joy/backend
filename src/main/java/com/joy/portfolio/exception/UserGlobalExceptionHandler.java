@@ -78,7 +78,7 @@ public class UserGlobalExceptionHandler {
 			exceptionMap.put("general", "Invalid Credentials");
 		} else
 			exceptionMap.put("general", authenticationException.getMessage());
-		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(exceptionMap);
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionMap);
 	}
 
 	@ExceptionHandler(value = MalformedJwtException.class)
