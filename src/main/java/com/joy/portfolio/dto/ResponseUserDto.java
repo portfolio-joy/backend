@@ -36,9 +36,6 @@ public class ResponseUserDto {
 	@JsonProperty("portfolioUrl")
 	String portfolioUrl;
 	
-	@JsonProperty("token")
-	String token;
-	
 	@JsonProperty("aboutMe")
 	private AboutMe aboutMe;
 

@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.joy.portfolio.dto.SkillDto;
 import com.joy.portfolio.entity.Skill;
+import com.joy.portfolio.service.JWTService;
 import com.joy.portfolio.service.SkillService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @RestController
@@ -26,15 +28,20 @@ public class SkillController {
 
 	@Autowired
 	SkillService skillService;
-
+	
+	@Autowired
+	JWTService jwtService;
+	
 	@PostMapping(value = "/skill")
-	public ResponseEntity<Skill> addSkill(@RequestBody @Valid SkillDto skillDto) {
-		return ResponseEntity.status(HttpStatus.CREATED).body(skillService.addSkill(skillDto));
+	public ResponseEntity<Skill> addSkill(HttpServletRequest request, @RequestBody @Valid SkillDto skillDto) {
+		String userId = jwtService.extractUserId(request);
+		return ResponseEntity.status(HttpStatus.CREATED).body(skillService.addSkill(skillDto, userId));
 	}
 
 	@PutMapping(value = "/skill/{id}")
-	public ResponseEntity<Skill> updateSkill(@PathVariable("id") String id, @RequestBody @Valid SkillDto skillDto) {
-		return ResponseEntity.status(HttpStatus.CREATED).body(skillService.updateSkill(id, skillDto));
+	public ResponseEntity<Skill> updateSkill(HttpServletRequest request, @PathVariable("id") String id, @RequestBody @Valid SkillDto skillDto) {
+		String userId = jwtService.extractUserId(request);
+		return ResponseEntity.status(HttpStatus.CREATED).body(skillService.updateSkill(id, skillDto, userId));
 	}
 
 	@DeleteMapping(value = "/skill/{id}")

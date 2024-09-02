@@ -18,8 +18,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.joy.portfolio.dto.AboutMeDto;
 import com.joy.portfolio.entity.AboutMe;
 import com.joy.portfolio.service.AboutMeService;
+import com.joy.portfolio.service.JWTService;
 import com.joy.portfolio.validator.DtoValidator;
 
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/user")
@@ -30,27 +32,38 @@ public class AboutMeController {
 
 	@Autowired
 	DtoValidator dtoValidator;
-	
+
 	@Autowired
 	AboutMeService aboutMeService;
 
+	@Autowired
+	JWTService jwtService;
+
 	@PostMapping(value = "/aboutMe", consumes = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.MULTIPART_FORM_DATA_VALUE })
-	public ResponseEntity<AboutMe> addAboutMe(@RequestPart String aboutMeData,
+	public ResponseEntity<AboutMe> addAboutMe(HttpServletRequest request, @RequestPart String aboutMeData,
 			@RequestPart("profile") MultipartFile profile) throws IOException {
+		System.out.println("Reached controller add about me");
 		AboutMeDto aboutMeDto = objectMapper.readValue(aboutMeData, AboutMeDto.class);
 		aboutMeDto.setProfile(profile);
 		dtoValidator.validate(aboutMeDto);
-		return ResponseEntity.status(HttpStatus.CREATED).body(aboutMeService.addAboutMe(aboutMeDto));
+		String userId = jwtService.extractUserId(request);
+		return ResponseEntity.status(HttpStatus.CREATED).body(aboutMeService.addAboutMe(aboutMeDto, userId));
 	}
 
 	@PutMapping(value = "/aboutMe/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.MULTIPART_FORM_DATA_VALUE })
-	public ResponseEntity<AboutMe> updateAboutMe(@PathVariable("id") String id, @RequestPart String aboutMeData,
-			@RequestPart("profile") MultipartFile profile) throws IOException {
+	public ResponseEntity<AboutMe> updateAboutMe(HttpServletRequest request, @PathVariable("id") String id,
+			@RequestPart String aboutMeData, @RequestPart("profile") MultipartFile profile) throws IOException {
+		System.out.println("Reached controller update about me");
 		AboutMeDto aboutMeDto = objectMapper.readValue(aboutMeData, AboutMeDto.class);
+		System.out.println("Reached controller add about me");
 		aboutMeDto.setProfile(profile);
+		System.out.println("Reached controller update about me");
 		dtoValidator.validate(aboutMeDto);
-		return ResponseEntity.status(HttpStatus.OK).body(aboutMeService.updateAboutMe(id, aboutMeDto));
+		System.out.println("Reached controller update about me");
+		String userId = jwtService.extractUserId(request);
+		System.out.println("Reached controller update about me : "+userId);
+		return ResponseEntity.status(HttpStatus.OK).body(aboutMeService.updateAboutMe(id, aboutMeDto, userId));
 	}
 }
