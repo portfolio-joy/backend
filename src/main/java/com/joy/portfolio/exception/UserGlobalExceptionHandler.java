@@ -84,11 +84,8 @@ public class UserGlobalExceptionHandler {
 	@ExceptionHandler(value = MalformedJwtException.class)
 	public @ResponseBody ResponseEntity<Map<String, String>> handleMalformedJwtException(
 			MalformedJwtException malformedJwtException) {
-		System.out.println(8);
 		Map<String, String> exceptionMap = new HashMap<>();
-		System.out.println(9);
 		exceptionMap.put("general", "Session Expired");
-		System.out.println(10);
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(exceptionMap);
 	}
 

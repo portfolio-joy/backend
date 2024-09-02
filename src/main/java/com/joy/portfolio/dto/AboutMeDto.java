@@ -27,5 +27,5 @@ public class AboutMeDto {
 	
 	@JsonIgnore
 	@ValidFile(fileType = "image/", message = "Invalid Image Type or Image size is larger than 10 MB")
-	private MultipartFile profile;
+	private MultipartFile image;
 }

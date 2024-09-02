@@ -29,11 +29,11 @@ public class AboutMeService {
 	AboutMeMapper aboutMeMapper;
 
 	public AboutMe addAboutMe(AboutMeDto aboutMeDto, String userId) throws IOException {
-		MultipartFile profile = aboutMeDto.getProfile();
+		MultipartFile profile = aboutMeDto.getImage();
 		Image profileImage = new Image(profile.getOriginalFilename(), profile.getContentType(), profile.getBytes());
 		profileImage = imageRepository.save(profileImage);
 		AboutMe aboutMe = aboutMeMapper.mapDtoToAboutMe(aboutMeDto);
-		aboutMe.setProfile(profileImage);
+		aboutMe.setImage(profileImage);
 		User user = new User();
 		user.setId(userId);
 		aboutMe.setUser(user);
@@ -41,16 +41,15 @@ public class AboutMeService {
 	}
 
 	public AboutMe updateAboutMe(String id, AboutMeDto aboutMeDto, String userId) throws IOException {
-		System.out.println("Reached here at updateAboutMe Service : "+userId);
 		AboutMe aboutMe = aboutMeRepository.findById(id)
 				.orElseThrow(() -> new EntityNotFoundException("AboutMe Not Found"));
-		String oldProfileId = aboutMe.getProfile().getId();
-		MultipartFile profile = aboutMeDto.getProfile();
+		String oldProfileId = aboutMe.getImage().getId();
+		MultipartFile profile = aboutMeDto.getImage();
 		Image profileImage = new Image(profile.getOriginalFilename(), profile.getContentType(), profile.getBytes());
 		profileImage = imageRepository.save(profileImage);
 		aboutMe = aboutMeMapper.mapDtoToAboutMe(aboutMeDto);
 		aboutMe.setId(id);
-		aboutMe.setProfile(profileImage);
+		aboutMe.setImage(profileImage);
 		User user = new User();
 		user.setId(userId);
 		aboutMe.setUser(user);
