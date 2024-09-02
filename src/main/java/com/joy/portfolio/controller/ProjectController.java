@@ -20,45 +20,54 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.joy.portfolio.dto.ProjectDto;
 import com.joy.portfolio.entity.Project;
+import com.joy.portfolio.service.JWTService;
 import com.joy.portfolio.service.ProjectService;
 import com.joy.portfolio.validator.DtoValidator;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/user")
 public class ProjectController {
-	
+
 	@Autowired
 	ObjectMapper objectMapper;
 
 	@Autowired
 	DtoValidator dtoValidator;
-	
+
 	@Autowired
 	ProjectService projectService;
-	
+
+	@Autowired
+	JWTService jwtService;
+
 	@PostMapping(value = "/project", consumes = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.MULTIPART_FORM_DATA_VALUE })
-	public ResponseEntity<Project> addProject(@RequestPart String projectData,
+	public ResponseEntity<Project> addProject(HttpServletRequest request, @RequestPart String projectData,
 			@RequestPart("image") MultipartFile image) throws IOException {
 		ProjectDto projectDto = objectMapper.readValue(projectData, ProjectDto.class);
 		projectDto.setImage(image);
 		dtoValidator.validate(projectDto);
-		return ResponseEntity.status(HttpStatus.CREATED).body(projectService.addProject(projectDto));
+		String userId = jwtService.extractUserId(request);
+		return ResponseEntity.status(HttpStatus.CREATED).body(projectService.addProject(projectDto, userId));
 	}
-	
+
 	@PutMapping(value = "/project/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.MULTIPART_FORM_DATA_VALUE })
-	public ResponseEntity<Project> updateProject(@PathVariable("id") String id, @RequestPart String projectData, @RequestPart("image") MultipartFile image) throws IOException {
+	public ResponseEntity<Project> updateProject(HttpServletRequest request, @PathVariable("id") String id,
+			@RequestPart String projectData, @RequestPart("image") MultipartFile image) throws IOException {
 		ProjectDto projectDto = objectMapper.readValue(projectData, ProjectDto.class);
 		projectDto.setImage(image);
 		dtoValidator.validate(projectDto);
-		return ResponseEntity.status(HttpStatus.OK).body(projectService.updateProject(id, projectDto));
+		String userId = jwtService.extractUserId(request);
+		return ResponseEntity.status(HttpStatus.OK).body(projectService.updateProject(id, projectDto, userId));
 	}
-	
+
 	@DeleteMapping(value = "/project/{id}")
-	public ResponseEntity<Map<String,String>> removeProject(@PathVariable("id") String id) {
+	public ResponseEntity<Map<String, String>> removeProject(@PathVariable("id") String id) {
 		projectService.removeProject(id);
-		Map<String,String> response = new HashMap<String,String>();
+		Map<String, String> response = new HashMap<String, String>();
 		response.put("id", id);
 		return ResponseEntity.ok(response);
 	}

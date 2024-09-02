@@ -1,8 +1,6 @@
 package com.joy.portfolio.dto;
 
 
-import java.util.Date;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
@@ -18,6 +16,9 @@ public class LoginResponseDto {
 	@JsonProperty("token")
     private String token;
 	
-	@JsonProperty("expiresIn")
-    private Date expiresIn;
+	@JsonProperty("firstName")
+    private String firstName;
+	
+	@JsonProperty("portfolioUrl")
+	private String portfolioUrl;
 }

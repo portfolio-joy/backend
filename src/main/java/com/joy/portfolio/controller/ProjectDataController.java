@@ -33,7 +33,6 @@ public class ProjectDataController {
 	@GetMapping("/projectData/{projectName}")
 	public ResponseEntity<List<ProjectData>> getByProjectNameAndUserId(HttpServletRequest request, @PathVariable("projectName") String projectId) {
 		String username = jwtService.extractUsername(request.getHeader("Authorization").substring(7));
-		System.out.println(username);
 		return ResponseEntity.ok(projectDataService.getByProjectNameAndUsername(projectId,username));
 	}
 }

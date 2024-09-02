@@ -48,9 +48,6 @@ public class User implements UserDetails{
 	@Column(nullable = false)
 	String portfolioUrl;
 	
-	@Column(unique=true)
-	String token;
-	
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private AboutMe aboutMe = null;
 
