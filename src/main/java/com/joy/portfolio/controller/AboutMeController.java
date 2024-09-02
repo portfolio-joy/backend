@@ -42,10 +42,9 @@ public class AboutMeController {
 	@PostMapping(value = "/aboutMe", consumes = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.MULTIPART_FORM_DATA_VALUE })
 	public ResponseEntity<AboutMe> addAboutMe(HttpServletRequest request, @RequestPart String aboutMeData,
-			@RequestPart("profile") MultipartFile profile) throws IOException {
-		System.out.println("Reached controller add about me");
+			@RequestPart("image") MultipartFile image) throws IOException {
 		AboutMeDto aboutMeDto = objectMapper.readValue(aboutMeData, AboutMeDto.class);
-		aboutMeDto.setProfile(profile);
+		aboutMeDto.setImage(image);
 		dtoValidator.validate(aboutMeDto);
 		String userId = jwtService.extractUserId(request);
 		return ResponseEntity.status(HttpStatus.CREATED).body(aboutMeService.addAboutMe(aboutMeDto, userId));
@@ -54,16 +53,11 @@ public class AboutMeController {
 	@PutMapping(value = "/aboutMe/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.MULTIPART_FORM_DATA_VALUE })
 	public ResponseEntity<AboutMe> updateAboutMe(HttpServletRequest request, @PathVariable("id") String id,
-			@RequestPart String aboutMeData, @RequestPart("profile") MultipartFile profile) throws IOException {
-		System.out.println("Reached controller update about me");
+			@RequestPart String aboutMeData, @RequestPart("image") MultipartFile image) throws IOException {
 		AboutMeDto aboutMeDto = objectMapper.readValue(aboutMeData, AboutMeDto.class);
-		System.out.println("Reached controller add about me");
-		aboutMeDto.setProfile(profile);
-		System.out.println("Reached controller update about me");
+		aboutMeDto.setImage(image);
 		dtoValidator.validate(aboutMeDto);
-		System.out.println("Reached controller update about me");
 		String userId = jwtService.extractUserId(request);
-		System.out.println("Reached controller update about me : "+userId);
 		return ResponseEntity.status(HttpStatus.OK).body(aboutMeService.updateAboutMe(id, aboutMeDto, userId));
 	}
 }
