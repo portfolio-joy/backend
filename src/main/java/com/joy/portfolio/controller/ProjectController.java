@@ -61,7 +61,7 @@ public class ProjectController {
 		projectDto.setImage(image);
 		dtoValidator.validate(projectDto);
 		String userId = jwtService.extractUserId(request);
-		return ResponseEntity.status(HttpStatus.OK).body(projectService.updateProject(id, projectDto, userId));
+		return ResponseEntity.ok(projectService.updateProject(id, projectDto, userId));
 	}
 
 	@DeleteMapping(value = "/project/{id}")
