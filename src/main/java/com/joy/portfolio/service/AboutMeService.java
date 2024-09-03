@@ -10,11 +10,10 @@ import com.joy.portfolio.dto.AboutMeDto;
 import com.joy.portfolio.entity.AboutMe;
 import com.joy.portfolio.entity.Image;
 import com.joy.portfolio.entity.User;
+import com.joy.portfolio.exception.DataNotFoundException;
 import com.joy.portfolio.mapper.AboutMeMapper;
 import com.joy.portfolio.repository.AboutMeRepository;
 import com.joy.portfolio.repository.ImageRepository;
-
-import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class AboutMeService {
@@ -42,7 +41,7 @@ public class AboutMeService {
 
 	public AboutMe updateAboutMe(String id, AboutMeDto aboutMeDto, String userId) throws IOException {
 		AboutMe aboutMe = aboutMeRepository.findById(id)
-				.orElseThrow(() -> new EntityNotFoundException("AboutMe Not Found"));
+				.orElseThrow(() -> new DataNotFoundException("AboutMe Not Found"));
 		String oldProfileId = aboutMe.getImage().getId();
 		MultipartFile profile = aboutMeDto.getImage();
 		Image profileImage = new Image(profile.getOriginalFilename(), profile.getContentType(), profile.getBytes());

@@ -6,14 +6,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.joy.portfolio.annotation.ValidFile;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
 public class ProjectDto {
 
-	@NotEmpty(message = "Skill name must not be empty")
+	@NotBlank(message = "Project name must not be empty")
 	private String name;
 
 	@NotBlank(message = "Brief Detail must not be empty")

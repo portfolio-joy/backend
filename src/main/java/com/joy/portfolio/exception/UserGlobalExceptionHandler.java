@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 
 @ControllerAdvice
@@ -97,11 +96,11 @@ public class UserGlobalExceptionHandler {
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(exceptionMap);
 	}
 
-	@ExceptionHandler(value = EntityNotFoundException.class)
-	public @ResponseBody ResponseEntity<Map<String, String>> handleUserNotFoundException(
-			EntityNotFoundException entityNotFoundException) {
+	@ExceptionHandler(value = DataNotFoundException.class)
+	public @ResponseBody ResponseEntity<Map<String, String>> handleDataNotFoundException(
+			DataNotFoundException dataNotFoundException) {
 		Map<String, String> exceptionMap = new HashMap<>();
-		exceptionMap.put("general", entityNotFoundException.getMessage());
+		exceptionMap.put("general", dataNotFoundException.getMessage());
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionMap);
 	}
 
