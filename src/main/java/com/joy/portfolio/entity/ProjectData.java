@@ -25,7 +25,7 @@ public class ProjectData {
 	@Column(nullable = false)
 	private String heading;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length=600)
 	private String description;
 	
 	@OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)

@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.joy.portfolio.dto.LoginDto;
 import com.joy.portfolio.dto.LoginResponseDto;
 import com.joy.portfolio.dto.RegisterDto;
-import com.joy.portfolio.dto.ResponseUserDto;
 import com.joy.portfolio.service.UserAuthService;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -28,10 +27,9 @@ public class UserAuthController {
 
 	@PostMapping("/register")
 	@Transactional
-	public @ResponseBody ResponseEntity<ResponseUserDto> register(@Valid @RequestBody RegisterDto registerDto) {
-		System.out.println(registerDto);
+	public @ResponseBody ResponseEntity<Void> register(@Valid @RequestBody RegisterDto registerDto) {
 		userAuthService.register(registerDto);
-		return ResponseEntity.status(HttpStatus.CREATED).body(null);
+		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 	
 	@PostMapping("/login")

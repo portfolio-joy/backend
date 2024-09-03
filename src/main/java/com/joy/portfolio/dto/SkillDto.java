@@ -1,6 +1,5 @@
 package com.joy.portfolio.dto;
 
-import com.joy.portfolio.entity.User;
 import com.joy.portfolio.enums.SkillType;
 
 import jakarta.persistence.EnumType;
@@ -29,7 +28,4 @@ public class SkillDto {
 	@NotEmpty(message = "Description must not be empty")
 	@Size(min = 1,max = 600)
 	private String description;
-	
-	@NotNull
-	private User user;
 }

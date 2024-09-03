@@ -23,7 +23,6 @@ public class ImageUtil {
             outputStream.close();
         } catch (Exception e) {
         }
-        System.out.println(outputStream.toByteArray().length);
         return outputStream.toByteArray();
     }
 

@@ -52,8 +52,6 @@ public class UserAuthService {
 		Map<String,Object> extraClaims = new HashMap<>();
 		extraClaims.put("userId", user.getId());
 		String jwtToken = jwtService.generateToken(extraClaims,user);
-		user.setToken(jwtToken);
-		user = userRepository.save(user);
-		return new LoginResponseDto(user.getId(), jwtToken, jwtService.getExpirationTime(jwtToken));
+		return new LoginResponseDto(user.getId(), jwtToken, user.getFirstName(), user.getPortfolioUrl());
 	}
 }

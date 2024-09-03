@@ -30,8 +30,8 @@ public class AboutMe {
 	private String skills;
 	
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name="profile_id", nullable=false)
-	private Image profile = null;
+	@JoinColumn(name="image_id", nullable=false)
+	private Image image;
 	
 	@OneToOne
 	@JoinColumn(name = "user_id", nullable = false)
