@@ -9,6 +9,6 @@ import com.joy.portfolio.entity.Skill;
 public interface SkillRepository extends JpaRepository<Skill, String> {
 
 	@Modifying
-	@Query("DELETE from Skill s where s.id=:id")
+	@Query("DELETE from Skill skill where skill.id=:id")
 	void deleteById(String id);
 }

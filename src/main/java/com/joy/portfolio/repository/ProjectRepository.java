@@ -11,8 +11,5 @@ public interface ProjectRepository extends JpaRepository<Project, String> {
 
 	@Query("SELECT COUNT(project)>0 FROM Project project WHERE project.name=:name AND project.user.id=:userId")
 	boolean existsByName(String name, String userId);
-	
-	@Query("SELECT project.id FROM Project project WHERE project.name=:name AND project.user.username=:username")
-	Optional<String> findProjectIdByUsername(String name, String username);
 
 }
