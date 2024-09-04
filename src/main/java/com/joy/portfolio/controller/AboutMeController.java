@@ -24,7 +24,7 @@ import com.joy.portfolio.validator.DtoValidator;
 import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/user/aboutMe")
 public class AboutMeController {
 
 	@Autowired
@@ -39,7 +39,7 @@ public class AboutMeController {
 	@Autowired
 	JWTService jwtService;
 
-	@PostMapping(value = "/aboutMe", consumes = { MediaType.APPLICATION_JSON_VALUE,
+	@PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.MULTIPART_FORM_DATA_VALUE })
 	public ResponseEntity<AboutMe> addAboutMe(HttpServletRequest request, @RequestPart String aboutMeData,
 			@RequestPart("image") MultipartFile image) throws IOException {
@@ -50,7 +50,7 @@ public class AboutMeController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(aboutMeService.addAboutMe(aboutMeDto, userId));
 	}
 
-	@PutMapping(value = "/aboutMe/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE,
+	@PutMapping(value = "/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.MULTIPART_FORM_DATA_VALUE })
 	public ResponseEntity<AboutMe> updateAboutMe(HttpServletRequest request, @PathVariable("id") String id,
 			@RequestPart String aboutMeData, @RequestPart("image") MultipartFile image) throws IOException {
