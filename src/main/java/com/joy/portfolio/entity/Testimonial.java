@@ -27,12 +27,12 @@ public class Testimonial {
 	@Column(nullable = false)
 	private String designation;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = 400)
 	private String description;
 
-	@Column(nullable = false)
-	@Min(1)
+	@Min(0)
 	@Max(5)
+	@Column(columnDefinition = "Integer default 0")
 	private int rating;
 
 	@ManyToOne
