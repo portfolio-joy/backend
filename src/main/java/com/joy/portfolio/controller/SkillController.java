@@ -28,10 +28,10 @@ public class SkillController {
 
 	@Autowired
 	SkillService skillService;
-	
+
 	@Autowired
 	JWTService jwtService;
-	
+
 	@PostMapping(value = "/skill")
 	public ResponseEntity<Skill> addSkill(HttpServletRequest request, @RequestBody @Valid SkillDto skillDto) {
 		String userId = jwtService.extractUserId(request);
@@ -39,15 +39,16 @@ public class SkillController {
 	}
 
 	@PutMapping(value = "/skill/{id}")
-	public ResponseEntity<Skill> updateSkill(HttpServletRequest request, @PathVariable("id") String id, @RequestBody @Valid SkillDto skillDto) {
+	public ResponseEntity<Skill> updateSkill(HttpServletRequest request, @PathVariable("id") String id,
+			@RequestBody @Valid SkillDto skillDto) {
 		String userId = jwtService.extractUserId(request);
 		return ResponseEntity.status(HttpStatus.CREATED).body(skillService.updateSkill(id, skillDto, userId));
 	}
 
 	@DeleteMapping(value = "/skill/{id}")
-	public ResponseEntity<Map<String,String>> removeSkill(@PathVariable("id") String id) {
+	public ResponseEntity<Map<String, String>> removeSkill(@PathVariable("id") String id) {
 		skillService.removeSkill(id);
-		Map<String,String> response = new HashMap<String,String>();
+		Map<String, String> response = new HashMap<String, String>();
 		response.put("id", id);
 		return ResponseEntity.ok(response);
 	}

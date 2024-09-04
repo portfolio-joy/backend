@@ -4,11 +4,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
-import com.joy.portfolio.entity.Skill;
+import com.joy.portfolio.entity.SocialMedia;
 
-public interface SkillRepository extends JpaRepository<Skill, String> {
+public interface SocialMediaRepository extends JpaRepository<SocialMedia, String> {
 
 	@Modifying
-	@Query("DELETE from Skill skill where skill.id=:id")
+	@Query("DELETE from SocialMedia socialMedia where socialMedia.id=:id")
 	void deleteById(String id);
 }
