@@ -23,7 +23,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/user/socialMedia")
 public class SocialMediaController {
 
 	@Autowired
@@ -32,7 +32,7 @@ public class SocialMediaController {
 	@Autowired
 	private JWTService jwtService;
 
-	@PostMapping("/socialMedia")
+	@PostMapping()
 	public ResponseEntity<SocialMedia> addSocialMedia(HttpServletRequest request,
 			@RequestBody @Valid SocialMediaDto socialMediaDto) {
 		String userId = jwtService.extractUserId(request);
@@ -40,14 +40,14 @@ public class SocialMediaController {
 				.body(socialMediaService.addSocialMedia(socialMediaDto, userId));
 	}
 
-	@PutMapping("/socialMedia/{id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<SocialMedia> updateSocialMedia(HttpServletRequest request, @PathVariable("id") String id,
 			@RequestBody @Valid SocialMediaDto socialMediaDto) {
 		String userId = jwtService.extractUserId(request);
 		return ResponseEntity.ok(socialMediaService.updateSocialMedia(id, socialMediaDto, userId));
 	}
 
-	@DeleteMapping("/socialMedia/{id}")
+	@DeleteMapping("/{id}")
 	public ResponseEntity<Map<String, String>> removeSocialMedia(@PathVariable("id") String id) {
 		socialMediaService.removeSocialMedia(id);
 		Map<String, String> response = new HashMap<>();

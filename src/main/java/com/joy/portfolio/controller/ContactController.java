@@ -19,7 +19,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/user/contact")
 public class ContactController {
 
 	@Autowired
@@ -28,13 +28,13 @@ public class ContactController {
 	@Autowired
 	JWTService jwtService;
 
-	@PostMapping("/contact")
+	@PostMapping()
 	public ResponseEntity<Contact> addContact(HttpServletRequest request, @RequestBody @Valid ContactDto contactDto) {
 		String userId = jwtService.extractUserId(request);
 		return ResponseEntity.status(HttpStatus.CREATED).body(contactService.addContact(contactDto, userId));
 	}
 
-	@PutMapping("/contact/{id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<Contact> updateContact(HttpServletRequest request, @PathVariable("id") String id,
 			@RequestBody @Valid ContactDto contactDto) {
 		String userId = jwtService.extractUserId(request);

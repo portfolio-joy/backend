@@ -14,41 +14,42 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.joy.portfolio.dto.SkillDto;
-import com.joy.portfolio.entity.Skill;
+import com.joy.portfolio.dto.TestimonialDto;
+import com.joy.portfolio.entity.Testimonial;
 import com.joy.portfolio.service.JWTService;
-import com.joy.portfolio.service.SkillService;
+import com.joy.portfolio.service.TestimonialService;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/user/skill")
-public class SkillController {
+@RequestMapping("/user/testimonial")
+public class TestimonialController {
 
 	@Autowired
-	SkillService skillService;
+	private TestimonialService testimonialService;
 
 	@Autowired
-	JWTService jwtService;
+	private JWTService jwtService;
 
 	@PostMapping()
-	public ResponseEntity<Skill> addSkill(HttpServletRequest request, @RequestBody @Valid SkillDto skillDto) {
+	public ResponseEntity<Testimonial> addTestimonial(HttpServletRequest request,
+			@RequestBody TestimonialDto testimonialDto) {
 		String userId = jwtService.extractUserId(request);
-		return ResponseEntity.status(HttpStatus.CREATED).body(skillService.addSkill(skillDto, userId));
+		return ResponseEntity.status(HttpStatus.CREATED)
+				.body(testimonialService.addTestimonial(testimonialDto, userId));
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Skill> updateSkill(HttpServletRequest request, @PathVariable("id") String id,
-			@RequestBody @Valid SkillDto skillDto) {
+	public ResponseEntity<Testimonial> updateTestimonial(HttpServletRequest request, @PathVariable("id") String id,
+			@RequestBody TestimonialDto testimonialDto) {
 		String userId = jwtService.extractUserId(request);
-		return ResponseEntity.status(HttpStatus.CREATED).body(skillService.updateSkill(id, skillDto, userId));
+		return ResponseEntity.ok(testimonialService.updateTestimonial(id, testimonialDto, userId));
 	}
 
-	@DeleteMapping(value = "/{id}")
-	public ResponseEntity<Map<String, String>> removeSkill(@PathVariable("id") String id) {
-		skillService.removeSkill(id);
-		Map<String, String> response = new HashMap<String, String>();
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Map<String, String>> removeTestimonial(@PathVariable("id") String id) {
+		testimonialService.removeTestimonial(id);
+		Map<String, String> response = new HashMap<>();
 		response.put("id", id);
 		return ResponseEntity.ok(response);
 	}
