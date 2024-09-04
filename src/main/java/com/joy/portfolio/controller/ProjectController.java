@@ -27,7 +27,7 @@ import com.joy.portfolio.validator.DtoValidator;
 import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/user/project")
 public class ProjectController {
 
 	@Autowired
@@ -42,7 +42,7 @@ public class ProjectController {
 	@Autowired
 	JWTService jwtService;
 
-	@PostMapping(value = "/project", consumes = { MediaType.APPLICATION_JSON_VALUE,
+	@PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.MULTIPART_FORM_DATA_VALUE })
 	public ResponseEntity<Project> addProject(HttpServletRequest request, @RequestPart String projectData,
 			@RequestPart("image") MultipartFile image) throws IOException {
@@ -53,7 +53,7 @@ public class ProjectController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(projectService.addProject(projectDto, userId));
 	}
 
-	@PutMapping(value = "/project/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE,
+	@PutMapping(value = "/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.MULTIPART_FORM_DATA_VALUE })
 	public ResponseEntity<Project> updateProject(HttpServletRequest request, @PathVariable("id") String id,
 			@RequestPart String projectData, @RequestPart("image") MultipartFile image) throws IOException {
@@ -64,7 +64,7 @@ public class ProjectController {
 		return ResponseEntity.ok(projectService.updateProject(id, projectDto, userId));
 	}
 
-	@DeleteMapping(value = "/project/{id}")
+	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<Map<String, String>> removeProject(@PathVariable("id") String id) {
 		projectService.removeProject(id);
 		Map<String, String> response = new HashMap<String, String>();
