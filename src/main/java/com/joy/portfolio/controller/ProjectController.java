@@ -42,8 +42,7 @@ public class ProjectController {
 	@Autowired
 	JWTService jwtService;
 
-	@PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE,
-			MediaType.MULTIPART_FORM_DATA_VALUE })
+	@PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE })
 	public ResponseEntity<Project> addProject(HttpServletRequest request, @RequestPart String projectData,
 			@RequestPart("image") MultipartFile image) throws IOException {
 		ProjectDto projectDto = objectMapper.readValue(projectData, ProjectDto.class);
@@ -53,8 +52,7 @@ public class ProjectController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(projectService.addProject(projectDto, userId));
 	}
 
-	@PutMapping(value = "/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE,
-			MediaType.MULTIPART_FORM_DATA_VALUE })
+	@PutMapping(value = "/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE })
 	public ResponseEntity<Project> updateProject(HttpServletRequest request, @PathVariable("id") String id,
 			@RequestPart String projectData, @RequestPart("image") MultipartFile image) throws IOException {
 		ProjectDto projectDto = objectMapper.readValue(projectData, ProjectDto.class);

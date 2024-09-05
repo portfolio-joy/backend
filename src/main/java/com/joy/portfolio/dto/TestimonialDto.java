@@ -8,8 +8,8 @@ import lombok.Data;
 
 @Data
 public class TestimonialDto {
-	
-	@NotBlank(message="Name must not be empty")
+
+	@NotBlank(message = "Name must not be empty")
 	private String name;
 
 	@NotBlank(message="Designation must not be empty")

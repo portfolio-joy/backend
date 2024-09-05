@@ -24,7 +24,7 @@ public class RegisterDto {
 
 	@NotEmpty(message = "Username must not be empty")
 	@Pattern(regexp = "^[a-zA-Z0-9]+$", message = "Username must only contain alphabetic or numeric characters")
-	@Size(min = 6,max = 16)
+	@Size(min = 6, max = 16)
 	String username;
 
 	@NotEmpty(message = "Password must should not be empty")
