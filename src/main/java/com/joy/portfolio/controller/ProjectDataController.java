@@ -78,7 +78,7 @@ public class ProjectDataController {
 	}
 
 	@DeleteMapping("/projectData/{id}")
-	public ResponseEntity<Map<String,String>> removeProjectData(@PathVariable("id") String id) {
+	public ResponseEntity<Map<String, String>> removeProjectData(@PathVariable("id") String id) {
 		projectDataService.removeProjectData(id);
 		Map<String, String> response = new HashMap<String, String>();
 		response.put("id", id);

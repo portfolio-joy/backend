@@ -20,7 +20,7 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private JWTService jwtService;
 
@@ -34,7 +34,7 @@ public class UserController {
 	public ResponseEntity<ResponseUserDto> getUserFromUsername(@PathVariable("username") String username) {
 		return ResponseEntity.ok(userService.getUserFromUsername(username));
 	}
-	
+
 	@PostMapping("/logout")
 	public ResponseEntity<Void> logoutUser(HttpServletRequest request) {
 		jwtService.blacklistToken(request);

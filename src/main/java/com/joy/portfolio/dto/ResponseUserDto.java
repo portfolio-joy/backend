@@ -17,7 +17,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class ResponseUserDto {
-	
+
 	@JsonProperty("id")
 	String id;
 
@@ -32,25 +32,25 @@ public class ResponseUserDto {
 
 	@JsonProperty("username")
 	String username;
-	
+
 	@JsonProperty("portfolioUrl")
 	String portfolioUrl;
-	
+
 	@JsonProperty("aboutMe")
 	private AboutMe aboutMe;
 
 	@JsonProperty("skills")
 	private List<Skill> allSkill = new ArrayList<>();
-	
+
 	@JsonProperty("projects")
 	private List<Project> allProject = new ArrayList<>();
-	
+
 	@JsonProperty("testimonials")
 	private List<Testimonial> allTestimonial = new ArrayList<>();
-	
+
 	@JsonProperty("contact")
 	private Contact contact;
-	
+
 	@JsonProperty("socialMedias")
 	private List<SocialMedia> allSocialMedia = new ArrayList<>();
 }

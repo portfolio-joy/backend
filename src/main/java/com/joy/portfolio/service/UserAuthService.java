@@ -21,19 +21,19 @@ import com.joy.portfolio.repository.UserRepository;
 
 @Service
 public class UserAuthService {
-	
+
 	@Autowired
 	private UserRepository userRepository;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	
+
 	@Autowired
 	private AuthenticationManager authenticationManager;
-	
+
 	@Autowired
 	private JWTService jwtService;
-	
+
 	@Autowired
 	private UserMapper userMapper;
 
@@ -46,12 +46,12 @@ public class UserAuthService {
 	}
 
 	public LoginResponseDto login(LoginDto loginDto) {
-		Authentication authentication = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(loginDto.getLoginId(), loginDto.getPassword()));
+		Authentication authentication = authenticationManager
+				.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getLoginId(), loginDto.getPassword()));
 		User user = (User) authentication.getPrincipal();
-		Map<String,Object> extraClaims = new HashMap<>();
+		Map<String, Object> extraClaims = new HashMap<>();
 		extraClaims.put("userId", user.getId());
-		String jwtToken = jwtService.generateToken(extraClaims,user);
+		String jwtToken = jwtService.generateToken(extraClaims, user);
 		return new LoginResponseDto(user.getId(), jwtToken, user.getFirstName(), user.getPortfolioUrl());
 	}
 }

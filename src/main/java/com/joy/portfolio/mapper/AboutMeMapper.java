@@ -11,5 +11,6 @@ import com.joy.portfolio.entity.AboutMe;
 public interface AboutMeMapper {
 
 	AboutMeMapper INSTANCE = Mappers.getMapper(AboutMeMapper.class);
+
 	AboutMe mapDtoToAboutMe(AboutMeDto aboutMeDto);
 }

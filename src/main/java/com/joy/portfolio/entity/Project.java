@@ -29,11 +29,11 @@ public class Project {
 	@Column(nullable = false)
 	private String name;
 
-	@Column(nullable = false, length=300)
+	@Column(nullable = false, length = 300)
 	private String briefDetail;
-	
+
 	@OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
-	@JoinColumn(name="image_id")
+	@JoinColumn(name = "image_id")
 	private Image image;
 
 	@ManyToOne

@@ -13,7 +13,7 @@ public class ContactDto {
 	private String emailId;
 
 	@NotBlank(message = "Phone Number must not be empty")
-	@Pattern(regexp="^[6-9]\\d{9}$", message="Invalid Phone Number")
+	@Pattern(regexp = "^[6-9]\\d{9}$", message = "Invalid Phone Number")
 	private String phoneNo;
 
 	@NotBlank(message = "Address must not be empty")

@@ -11,5 +11,6 @@ import com.joy.portfolio.entity.Project;
 public interface ProjectMapper {
 
 	ProjectMapper INSTANCE = Mappers.getMapper(ProjectMapper.class);
+
 	Project mapDtoToProject(ProjectDto projectDto);
 }

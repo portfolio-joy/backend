@@ -37,10 +37,10 @@ public class Skill {
 	@Min(1)
 	@Max(100)
 	private int proficiency;
-	
-	@Column(nullable = false, length=600)
+
+	@Column(nullable = false, length = 600)
 	private String description;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "user_id", nullable = false)
 	@JsonBackReference(value = "user-skill")

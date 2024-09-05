@@ -9,7 +9,8 @@ import com.joy.portfolio.entity.Contact;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
 public interface ContactMapper {
-	
+
 	ContactMapper INSTANCE = Mappers.getMapper(ContactMapper.class);
+
 	Contact mapDtoToContact(ContactDto contactDto);
 }

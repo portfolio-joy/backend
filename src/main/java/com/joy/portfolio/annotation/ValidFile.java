@@ -18,9 +18,9 @@ import jakarta.validation.Payload;
 public @interface ValidFile {
 
 	String message();
-	
+
 	String fileType();
-	
+
 	Class<?>[] groups() default {};
 
 	Class<? extends Payload>[] payload() default {};

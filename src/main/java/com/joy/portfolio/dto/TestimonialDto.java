@@ -6,14 +6,14 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public class TestimonialDto {
-	
-	@NotBlank(message="Name must not be empty")
+
+	@NotBlank(message = "Name must not be empty")
 	private String name;
 
-	@NotNull(message="Designation must not be empty")
+	@NotNull(message = "Designation must not be empty")
 	private String designation;
 
-	@NotNull(message="Description must not be empty")
+	@NotNull(message = "Description must not be empty")
 	private String description;
 
 	@Min(0)

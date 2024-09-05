@@ -11,6 +11,6 @@ import com.joy.portfolio.entity.User;
 public interface UserRepository extends JpaRepository<User, String> {
 
 	Optional<User> findByEmailId(String emailId);
-	
+
 	Optional<User> findByUsername(String username);
 }

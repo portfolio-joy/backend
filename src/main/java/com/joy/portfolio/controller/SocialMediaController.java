@@ -53,5 +53,5 @@ public class SocialMediaController {
 		Map<String, String> response = new HashMap<>();
 		response.put("id", id);
 		return ResponseEntity.ok(response);
-	}	
+	}
 }

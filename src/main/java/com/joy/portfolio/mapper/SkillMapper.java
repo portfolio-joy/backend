@@ -11,5 +11,6 @@ import com.joy.portfolio.entity.Skill;
 public interface SkillMapper {
 
 	SkillMapper INSTANCE = Mappers.getMapper(SkillMapper.class);
+
 	Skill mapDtoToSkill(SkillDto skillDto);
 }

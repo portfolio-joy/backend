@@ -8,10 +8,10 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 public class FileTypeValidator implements ConstraintValidator<ValidFile, MultipartFile> {
-	
+
 	private String fileType;
 	private final long MAX_FILE_SIZE = 10485760;
-	
+
 	@Override
 	public void initialize(ValidFile validFile) {
 		this.fileType = validFile.fileType();
@@ -19,7 +19,8 @@ public class FileTypeValidator implements ConstraintValidator<ValidFile, Multipa
 
 	@Override
 	public boolean isValid(MultipartFile file, ConstraintValidatorContext context) {
-		return file.getContentType() != null && file.getContentType().startsWith(fileType) && file.getSize()<=MAX_FILE_SIZE;
+		return file.getContentType() != null && file.getContentType().startsWith(fileType)
+				&& file.getSize() <= MAX_FILE_SIZE;
 	}
 
 }

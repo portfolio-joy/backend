@@ -19,20 +19,20 @@ public class AboutMe {
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;
-	
+
 	@Column(nullable = false)
 	private String name;
-	
-	@Column(nullable = false, length=600)
+
+	@Column(nullable = false, length = 600)
 	private String description;
 
 	@Column(nullable = false)
 	private String skills;
-	
+
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name="image_id", nullable=false)
+	@JoinColumn(name = "image_id", nullable = false)
 	private Image image;
-	
+
 	@OneToOne
 	@JoinColumn(name = "user_id", nullable = false)
 	@JsonBackReference(value = "user-aboutMe")

@@ -24,7 +24,7 @@ public class ProjectDataService {
 
 	@Autowired
 	ImageRepository imageRepository;
-	
+
 	@Autowired
 	ProjectRepository projectRepository;
 

@@ -10,5 +10,6 @@ import com.joy.portfolio.entity.Testimonial;
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
 public interface TestimonialMapper {
 	TestimonialMapper INSTANCE = Mappers.getMapper(TestimonialMapper.class);
+
 	Testimonial mapDtoToTestimonial(TestimonialDto testimonialDto);
 }

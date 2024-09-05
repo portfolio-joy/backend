@@ -31,9 +31,10 @@ public class UserAuthController {
 		userAuthService.register(registerDto);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
-	
+
 	@PostMapping("/login")
-	public @ResponseBody ResponseEntity<LoginResponseDto> login(@Valid @RequestBody LoginDto loginDto, HttpServletResponse response) {
+	public @ResponseBody ResponseEntity<LoginResponseDto> login(@Valid @RequestBody LoginDto loginDto,
+			HttpServletResponse response) {
 		LoginResponseDto loginResponseDto = userAuthService.login(loginDto);
 		return ResponseEntity.ok(loginResponseDto);
 	}

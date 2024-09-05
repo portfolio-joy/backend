@@ -21,7 +21,7 @@ import lombok.Data;
 
 @Entity
 @Data
-public class User implements UserDetails{
+public class User implements UserDetails {
 
 	private static final long serialVersionUID = 1L;
 
@@ -39,30 +39,30 @@ public class User implements UserDetails{
 	@Email
 	String emailId;
 
-	@Column(nullable = false, unique = true, length=16)
+	@Column(nullable = false, unique = true, length = 16)
 	String username;
 
 	@Column(nullable = false)
 	String password;
-	
+
 	@Column(nullable = false)
 	String portfolioUrl;
-	
+
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private AboutMe aboutMe = null;
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Skill> allSkill = new ArrayList<>();
-	
+
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Project> allProject = new ArrayList<>();
-	
+
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Testimonial> allTestimonial = new ArrayList<>();
-	
+
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Contact contact = null;
-	
+
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<SocialMedia> allSocialMedia = new ArrayList<>();
 
@@ -70,33 +70,33 @@ public class User implements UserDetails{
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return List.of();
 	}
-	
+
 	public String getPassword() {
-        return password;
-    }
+		return password;
+	}
 
 	@Override
 	public String getUsername() {
 		return username;
 	}
-	
+
 	@Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
+	public boolean isAccountNonExpired() {
+		return true;
+	}
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
 
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
 
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
+	@Override
+	public boolean isEnabled() {
+		return true;
+	}
 }
