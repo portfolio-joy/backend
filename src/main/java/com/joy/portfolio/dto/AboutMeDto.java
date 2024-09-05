@@ -11,20 +11,20 @@ import lombok.Data;
 
 @Data
 public class AboutMeDto {
-	
+
 	@JsonIgnore
 	private String id;
-	
+
 	@NotBlank(message = "Name must not be empty")
 	private String name;
-	
+
 	@NotBlank(message = "Description must not be empty")
-	@Size(min = 1,max = 600)
+	@Size(min = 1, max = 600)
 	private String description;
 
 	@NotBlank(message = "Skills must not be empty")
 	private String skills;
-	
+
 	@JsonIgnore
 	@ValidFile(fileType = "image/", message = "Invalid Image Type or Image size is larger than 10 MB")
 	private MultipartFile image;

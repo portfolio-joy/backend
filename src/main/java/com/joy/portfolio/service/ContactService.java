@@ -15,10 +15,10 @@ public class ContactService {
 
 	@Autowired
 	private ContactRepository contactRepository;
-	
+
 	@Autowired
 	private ContactMapper contactMapper;
-	
+
 	public Contact addContact(ContactDto contactDto, String userId) {
 		Contact contact = contactMapper.mapDtoToContact(contactDto);
 		User user = new User();
@@ -26,9 +26,10 @@ public class ContactService {
 		contact.setUser(user);
 		return contactRepository.save(contact);
 	}
-	
+
 	public Contact updateContact(String id, ContactDto contactDto, String userId) {
-		if(!contactRepository.existsById(id)) throw new DataNotFoundException("Contact Not Found");
+		if (!contactRepository.existsById(id))
+			throw new DataNotFoundException("Contact Not Found");
 		Contact contact = contactMapper.mapDtoToContact(contactDto);
 		contact.setId(id);
 		User user = new User();

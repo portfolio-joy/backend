@@ -12,6 +12,8 @@ import com.joy.portfolio.entity.User;
 public interface UserMapper {
 
 	UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
+
 	public User mapDtoToUser(RegisterDto registerDto);
+
 	public ResponseUserDto mapUserToDto(User user);
 }

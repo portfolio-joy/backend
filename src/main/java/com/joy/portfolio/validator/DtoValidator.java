@@ -11,14 +11,13 @@ import jakarta.validation.Validator;
 
 @Component
 public class DtoValidator {
-	
+
 	@Autowired
 	private Validator validator;
-	
+
 	public <T> void validate(T dtoObject) {
 		Set<ConstraintViolation<T>> violations = validator.validate(dtoObject);
-		if(!violations.isEmpty())
-		{
+		if (!violations.isEmpty()) {
 			throw new ConstraintViolationException(violations);
 		}
 	}

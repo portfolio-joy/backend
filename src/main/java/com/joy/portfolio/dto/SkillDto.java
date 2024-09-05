@@ -13,7 +13,7 @@ import lombok.Data;
 
 @Data
 public class SkillDto {
-	
+
 	@NotEmpty(message = "Skill name must not be empty")
 	private String name;
 
@@ -24,8 +24,8 @@ public class SkillDto {
 	@Min(1)
 	@Max(100)
 	private int proficiency;
-	
+
 	@NotEmpty(message = "Description must not be empty")
-	@Size(min = 1,max = 600)
+	@Size(min = 1, max = 600)
 	private String description;
 }
