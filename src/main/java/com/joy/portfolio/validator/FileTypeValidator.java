@@ -22,5 +22,4 @@ public class FileTypeValidator implements ConstraintValidator<ValidFile, Multipa
 		return file.getContentType() != null && file.getContentType().startsWith(fileType)
 				&& file.getSize() <= MAX_FILE_SIZE;
 	}
-
 }

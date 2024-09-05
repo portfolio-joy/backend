@@ -17,5 +17,4 @@ public class URLValidator implements ConstraintValidator<ValidUrl, String> {
 	public boolean isValid(String url, ConstraintValidatorContext context) {
 		return URL_VALIDATOR.isValid(url,context);
 	}
-
 }

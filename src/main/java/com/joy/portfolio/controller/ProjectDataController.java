@@ -84,5 +84,4 @@ public class ProjectDataController {
 		response.put("id", id);
 		return ResponseEntity.ok(response);
 	}
-
 }
