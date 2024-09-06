@@ -9,6 +9,6 @@ import com.joy.portfolio.entity.ProjectData;
 
 public interface ProjectDataRepository extends JpaRepository<ProjectData, String> {
 
-	@Query("SELECT projectData FROM ProjectData projectData WHERE projectData.project.name = (SELECT project.name FROM Project project WHERE project.name=:projectName AND project.user.username=:username)")
+	@Query("SELECT projectData FROM ProjectData projectData WHERE projectData.project.id = (SELECT project.id FROM Project project WHERE project.name=:projectName AND project.user.username=:username)")
 	List<ProjectData> findByProjectNameAndUsername(String projectName, String username);
 }
