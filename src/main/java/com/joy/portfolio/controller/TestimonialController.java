@@ -20,6 +20,7 @@ import com.joy.portfolio.service.JWTService;
 import com.joy.portfolio.service.TestimonialService;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/user/testimonial")
@@ -33,7 +34,7 @@ public class TestimonialController {
 
 	@PostMapping()
 	public ResponseEntity<Testimonial> addTestimonial(HttpServletRequest request,
-			@RequestBody TestimonialDto testimonialDto) {
+			@RequestBody @Valid TestimonialDto testimonialDto) {
 		String userId = jwtService.extractUserId(request);
 		return ResponseEntity.status(HttpStatus.CREATED)
 				.body(testimonialService.addTestimonial(testimonialDto, userId));
@@ -41,7 +42,7 @@ public class TestimonialController {
 
 	@PutMapping("/{id}")
 	public ResponseEntity<Testimonial> updateTestimonial(HttpServletRequest request, @PathVariable("id") String id,
-			@RequestBody TestimonialDto testimonialDto) {
+			@RequestBody @Valid TestimonialDto testimonialDto) {
 		String userId = jwtService.extractUserId(request);
 		return ResponseEntity.ok(testimonialService.updateTestimonial(id, testimonialDto, userId));
 	}

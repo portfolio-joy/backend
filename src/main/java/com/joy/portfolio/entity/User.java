@@ -29,10 +29,10 @@ public class User implements UserDetails {
 	@GeneratedValue(strategy = GenerationType.UUID)
 	String id;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length=127)
 	String firstName;
 
-	@Column
+	@Column(length=127)
 	String lastName;
 
 	@Column(nullable = false)
