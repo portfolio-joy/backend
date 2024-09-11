@@ -9,7 +9,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
-import jakarta.validation.constraints.Email;
 import lombok.Data;
 
 @Entity
@@ -20,8 +19,7 @@ public class Contact {
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;
 
-	@Column(nullable = false)
-	@Email
+	@Column(nullable = false, length=35)
 	private String emailId;
 
 	@Column(nullable = false)

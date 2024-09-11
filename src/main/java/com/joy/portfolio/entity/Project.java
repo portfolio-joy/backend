@@ -26,7 +26,7 @@ public class Project {
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length=35)
 	private String name;
 
 	@Column(nullable = false, length = 300)

@@ -21,10 +21,10 @@ public class Testimonial {
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = 35)
 	private String name;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = 35)
 	private String designation;
 
 	@Column(nullable = false, length = 400)
