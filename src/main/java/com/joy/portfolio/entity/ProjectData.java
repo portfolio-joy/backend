@@ -22,7 +22,7 @@ public class ProjectData {
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length=35)
 	private String heading;
 
 	@Column(nullable = false, length = 600)

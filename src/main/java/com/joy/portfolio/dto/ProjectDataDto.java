@@ -8,15 +8,18 @@ import com.joy.portfolio.entity.Project;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
 public class ProjectDataDto {
 
 	@NotBlank(message = "Heading must not be empty")
+	@Size(max=35, message = "Heading length should be less than 36")
 	private String heading;
 
 	@NotBlank(message = "Description name must not be empty")
+	@Size(max=600, message="Description length should be less than 601")
 	private String description;
 
 	@JsonIgnore

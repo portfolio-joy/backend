@@ -10,13 +10,15 @@ import lombok.Data;
 public class TestimonialDto {
 
 	@NotBlank(message = "Name must not be empty")
+	@Size(max = 35, message = "Name length should be less than 36")
 	private String name;
 
 	@NotBlank(message="Designation must not be empty")
+	@Size(max = 35, message = "Designation length should be less than 36")
 	private String designation;
 
 	@NotBlank(message="Description must not be empty")
-	@Size(min = 1,max = 400)
+	@Size(max = 400, message = "Description length should be less than 401")
 	private String description;
 
 	@Min(0)

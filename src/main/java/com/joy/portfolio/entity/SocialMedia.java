@@ -1,7 +1,6 @@
 package com.joy.portfolio.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.joy.portfolio.annotation.ValidUrl;
 import com.joy.portfolio.enums.SocialMediaName;
 
 import jakarta.persistence.Column;
@@ -28,7 +27,6 @@ public class SocialMedia {
 	private SocialMediaName name;
 
 	@Column(nullable = false)
-	@ValidUrl
 	private String url;
 
 	@ManyToOne

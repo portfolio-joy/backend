@@ -13,7 +13,7 @@ public interface UserMapper {
 
 	UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
-	public User mapDtoToUser(RegisterDto registerDto);
+	User mapDtoToUser(RegisterDto registerDto);
 
-	public ResponseUserDto mapUserToDto(User user);
+	ResponseUserDto mapUserToDto(User user);
 }
