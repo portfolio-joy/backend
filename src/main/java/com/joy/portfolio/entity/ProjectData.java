@@ -31,6 +31,9 @@ public class ProjectData {
 	@OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
 	@JoinColumn(name = "image_id")
 	private Image image;
+	
+	@Column(columnDefinition = "Integer default '0'")
+	private int projectDataOrder;
 
 	@ManyToOne
 	@JoinColumn(name = "project_id", nullable = false)
