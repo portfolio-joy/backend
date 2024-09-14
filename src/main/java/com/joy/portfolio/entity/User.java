@@ -16,7 +16,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
-import jakarta.validation.constraints.Email;
 import lombok.Data;
 
 @Entity
@@ -29,14 +28,13 @@ public class User implements UserDetails {
 	@GeneratedValue(strategy = GenerationType.UUID)
 	String id;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length=17)
 	String firstName;
 
-	@Column
+	@Column(length=17)
 	String lastName;
 
-	@Column(nullable = false)
-	@Email
+	@Column(nullable = false, length = 35)
 	String emailId;
 
 	@Column(nullable = false, unique = true, length = 16)

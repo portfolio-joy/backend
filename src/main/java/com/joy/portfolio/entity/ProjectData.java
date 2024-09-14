@@ -22,7 +22,7 @@ public class ProjectData {
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length=35)
 	private String heading;
 
 	@Column(nullable = false, length = 600)
@@ -31,6 +31,9 @@ public class ProjectData {
 	@OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
 	@JoinColumn(name = "image_id")
 	private Image image;
+	
+	@Column(columnDefinition = "Integer default '0'")
+	private int projectDataOrder;
 
 	@ManyToOne
 	@JoinColumn(name = "project_id", nullable = false)

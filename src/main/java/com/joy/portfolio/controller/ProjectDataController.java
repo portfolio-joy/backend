@@ -14,12 +14,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.joy.portfolio.dto.EntityReorderDto;
 import com.joy.portfolio.dto.ProjectDataDto;
 import com.joy.portfolio.entity.ProjectData;
 import com.joy.portfolio.service.JWTService;
@@ -27,6 +29,7 @@ import com.joy.portfolio.service.ProjectDataService;
 import com.joy.portfolio.validator.DtoValidator;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/user")
@@ -75,6 +78,12 @@ public class ProjectDataController {
 		projectDataDto.setImage(image);
 		dtoValidator.validate(projectDataDto);
 		return ResponseEntity.ok(projectDataService.updateProjectData(id, projectDataDto));
+	}
+	
+	@PutMapping("/projectData/reorder")
+	public ResponseEntity<Void> reorderProjectData(@RequestBody @Valid EntityReorderDto entityReorderDto) {
+		projectDataService.reorderProjectData(entityReorderDto);
+		return ResponseEntity.ok(null);
 	}
 
 	@DeleteMapping("/projectData/{id}")

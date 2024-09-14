@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.joy.portfolio.dto.EntityReorderDto;
 import com.joy.portfolio.dto.ProjectDataDto;
 import com.joy.portfolio.entity.Image;
 import com.joy.portfolio.entity.ProjectData;
@@ -15,6 +16,8 @@ import com.joy.portfolio.mapper.ProjectDataMapper;
 import com.joy.portfolio.repository.ImageRepository;
 import com.joy.portfolio.repository.ProjectDataRepository;
 import com.joy.portfolio.repository.ProjectRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class ProjectDataService {
@@ -41,6 +44,8 @@ public class ProjectDataService {
 		projectDataImage = imageRepository.save(projectDataImage);
 		ProjectData projectData = projectDataMapper.mapDtoToProjectData(projectDataDto);
 		projectData.setImage(projectDataImage);
+		int lastOrderNumber = projectDataRepository.getLastOrderNumber(projectData.getProject().getId()).orElse(-1);
+		projectData.setProjectDataOrder(lastOrderNumber + 1);
 		return projectDataRepository.save(projectData);
 	}
 
@@ -59,9 +64,28 @@ public class ProjectDataService {
 		return projectData;
 	}
 
+	@Transactional
+	public void reorderProjectData(EntityReorderDto entityReorderDto) {
+		int lastOrderNumber = projectDataRepository.getLastOrderNumber(entityReorderDto.getSuperEntityId()).orElse(-1);
+		if (entityReorderDto.getSuperEntityId() == null || entityReorderDto.getSuperEntityId().trim().length() == 0)
+			throw new IllegalArgumentException("Project Id must not be empty");
+		if (entityReorderDto.getOldOrderNumber() > lastOrderNumber
+				|| entityReorderDto.getNewOrderNumber() > lastOrderNumber)
+			throw new IllegalArgumentException("Invalid Order Number");
+		if(entityReorderDto.getOldOrderNumber() == entityReorderDto.getNewOrderNumber()) return;
+		projectDataRepository.updateAllProjectDataOrderBeforeReordering(entityReorderDto.getOldOrderNumber(),
+				entityReorderDto.getNewOrderNumber(), entityReorderDto.getEntityId(),
+				entityReorderDto.getSuperEntityId());
+		projectDataRepository.updateSingleProjectDataOrder(entityReorderDto.getNewOrderNumber(),
+				entityReorderDto.getEntityId());
+	}
+
+	@Transactional
 	public void removeProjectData(String id) {
-		if (!projectDataRepository.existsById(id))
-			throw new DataNotFoundException("Project Data Not Found");
+		ProjectData projectData = projectDataRepository.findById(id)
+				.orElseThrow(() -> new DataNotFoundException("Project Data Not Found"));
 		projectDataRepository.deleteById(id);
+		projectDataRepository.updateAllProjectDataOrderAfterRemoval(projectData.getProjectDataOrder(),
+				projectData.getProject().getId());
 	}
 }

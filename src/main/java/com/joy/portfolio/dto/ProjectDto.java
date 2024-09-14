@@ -13,10 +13,11 @@ import lombok.Data;
 public class ProjectDto {
 
 	@NotBlank(message = "Project name must not be empty")
+	@Size(max=35, message="Project name length should be less than 36")
 	private String name;
 
 	@NotBlank(message = "Brief Detail must not be empty")
-	@Size(min = 1, max = 300)
+	@Size(max = 300, message = "Brief Detail length should be less than 301")
 	private String briefDetail;
 
 	@JsonIgnore
