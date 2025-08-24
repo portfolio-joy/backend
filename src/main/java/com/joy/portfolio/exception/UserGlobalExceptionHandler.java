@@ -28,7 +28,8 @@ public class UserGlobalExceptionHandler {
 			DataIntegrityViolationException dataIntegrityViolationException) {
 		String exceptionMessage = dataIntegrityViolationException.getMessage();
 		Map<String, String> exceptionMap = new HashMap<>();
-		if (exceptionMessage.matches("Duplicate entry .* for key 'user.email_id'")) {
+		System.out.println(exceptionMessage);
+		if (exceptionMessage.matches("Duplicate entry '.*' for key 'user.email_id'")) {
 			exceptionMap.put("emailId", "Email Id already exists");
 		} else if (exceptionMessage.matches("Duplicate entry '.*' for key 'user.username'")) {
 			exceptionMap.put("username", "Username already exists");

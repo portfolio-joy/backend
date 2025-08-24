@@ -12,18 +12,18 @@ import jakarta.servlet.MultipartConfigElement;
 
 @ServletComponentScan
 @SpringBootApplication
-@ComponentScan(basePackages = {"com.joy.portfolio", "com.portfolio.joy.configs"})
+@ComponentScan(basePackages = { "com.joy.portfolio", "com.portfolio.joy.configs" })
 public class BackendApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(BackendApplication.class, args);
 	}
-	
+
 	@Bean
 	MultipartConfigElement multipartConfigElement() {
-	    MultipartConfigFactory factory = new MultipartConfigFactory();
-	    factory.setMaxFileSize(DataSize.ofBytes(10485760));
-	    factory.setMaxRequestSize(DataSize.ofBytes(10485760));
-	    return factory.createMultipartConfig();
+		MultipartConfigFactory factory = new MultipartConfigFactory();
+		factory.setMaxFileSize(DataSize.ofMegabytes(10));
+		factory.setMaxRequestSize(DataSize.ofMegabytes(100));
+		return factory.createMultipartConfig();
 	}
 }

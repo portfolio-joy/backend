@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -39,6 +40,12 @@ public class UserAuthService {
 
 	@Transactional
 	public void register(RegisterDto registerDto) {
+		if(this.userRepository.existsByEmailId(registerDto.getEmailId())) {
+			throw new DataIntegrityViolationException("Duplicate entry '"+ registerDto.getEmailId() +"' for key 'user.email_id'");
+		}
+		if(this.userRepository.existsByUsername(registerDto.getUsername())) {
+			throw new DataIntegrityViolationException("Duplicate entry '"+ registerDto.getUsername() +"' for key 'user.username'");
+		}
 		User user = userMapper.mapDtoToUser(registerDto);
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		user.setPortfolioUrl(PortfolioURL.url + user.getUsername());
@@ -52,6 +59,6 @@ public class UserAuthService {
 		Map<String, Object> extraClaims = new HashMap<>();
 		extraClaims.put("userId", user.getId());
 		String jwtToken = jwtService.generateToken(extraClaims, user);
-		return new LoginResponseDto(user.getId(), jwtToken, user.getFirstName(), user.getPortfolioUrl());
+		return new LoginResponseDto("", jwtToken, user.getFirstName(), user.getPortfolioUrl());
 	}
 }

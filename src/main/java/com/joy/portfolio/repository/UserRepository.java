@@ -10,6 +10,10 @@ import com.joy.portfolio.entity.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, String> {
 
+	Boolean existsByEmailId(String emailId);
+
+	Boolean existsByUsername(String username);
+
 	Optional<User> findByEmailId(String emailId);
 
 	Optional<User> findByUsername(String username);

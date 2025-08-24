@@ -39,14 +39,14 @@ public class SkillController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Skill> updateSkill(HttpServletRequest request, @PathVariable("id") String id,
+	public ResponseEntity<Skill> updateSkill(HttpServletRequest request, @PathVariable String id,
 			@RequestBody @Valid SkillDto skillDto) {
 		String userId = jwtService.extractUserId(request);
 		return ResponseEntity.status(HttpStatus.CREATED).body(skillService.updateSkill(id, skillDto, userId));
 	}
 
 	@DeleteMapping(value = "/{id}")
-	public ResponseEntity<Map<String, String>> removeSkill(@PathVariable("id") String id) {
+	public ResponseEntity<Map<String, String>> removeSkill(@PathVariable String id) {
 		skillService.removeSkill(id);
 		Map<String, String> response = new HashMap<String, String>();
 		response.put("id", id);

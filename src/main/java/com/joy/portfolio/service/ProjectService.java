@@ -3,7 +3,6 @@ package com.joy.portfolio.service;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,6 +14,8 @@ import com.joy.portfolio.exception.DataNotFoundException;
 import com.joy.portfolio.mapper.ProjectMapper;
 import com.joy.portfolio.repository.ImageRepository;
 import com.joy.portfolio.repository.ProjectRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class ProjectService {
@@ -29,14 +30,13 @@ public class ProjectService {
 	ProjectMapper projectMapper;
 
 	public Project addProject(ProjectDto projectDto, String userId) throws IOException {
-		if (projectRepository.existsByName(projectDto.getName(), userId))
-			throw new DataIntegrityViolationException(
-					"Duplicate entry '" + projectDto.getName() + "' for key 'project.name'", new Throwable(""));
 		MultipartFile image = projectDto.getImage();
 		Image projectImage = new Image(image.getOriginalFilename(), image.getContentType(), image.getBytes());
 		projectImage = imageRepository.save(projectImage);
 		Project project = projectMapper.mapDtoToProject(projectDto);
 		project.setImage(projectImage);
+		int lastOrderNumber = projectRepository.getLastOrderNumber(userId).orElse(-1);
+		project.setPosition(lastOrderNumber+1);
 		User user = new User();
 		user.setId(userId);
 		project.setUser(user);
@@ -61,9 +61,12 @@ public class ProjectService {
 		return project;
 	}
 
+	@Transactional
 	public void removeProject(String id) {
-		if (!projectRepository.existsById(id))
-			throw new DataNotFoundException("Project Not Found");
+		Project project = projectRepository.findById(id)
+				.orElseThrow(() -> new DataNotFoundException("Project Not Found"));
 		projectRepository.deleteById(id);
+		projectRepository.updateAllProjectOrderAfterRemoval(project.getPosition(),
+				project.getUser().getId());
 	}
 }

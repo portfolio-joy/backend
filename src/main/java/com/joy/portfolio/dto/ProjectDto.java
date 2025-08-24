@@ -17,10 +17,9 @@ public class ProjectDto {
 	private String name;
 
 	@NotBlank(message = "Brief Detail must not be empty")
-	@Size(max = 300, message = "Brief Detail length should be less than 301")
 	private String briefDetail;
 
 	@JsonIgnore
-	@ValidFile(fileType = "image/", message = "Invalid Image Type or Image size is larger than 10 MB")
+	@ValidFile(fileType = "image/", message = "Invalid Image Type or Image size is larger than 1 MB")
 	private MultipartFile image;
 }

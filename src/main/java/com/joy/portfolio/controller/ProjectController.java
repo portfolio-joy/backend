@@ -53,7 +53,7 @@ public class ProjectController {
 	}
 
 	@PutMapping(value = "/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE })
-	public ResponseEntity<Project> updateProject(HttpServletRequest request, @PathVariable("id") String id,
+	public ResponseEntity<Project> updateProject(HttpServletRequest request, @PathVariable String id,
 			@RequestPart String projectData, @RequestPart("image") MultipartFile image) throws IOException {
 		ProjectDto projectDto = objectMapper.readValue(projectData, ProjectDto.class);
 		projectDto.setImage(image);
@@ -63,7 +63,7 @@ public class ProjectController {
 	}
 
 	@DeleteMapping(value = "/{id}")
-	public ResponseEntity<Map<String, String>> removeProject(@PathVariable("id") String id) {
+	public ResponseEntity<Map<String, String>> removeProject(@PathVariable String id) {
 		projectService.removeProject(id);
 		Map<String, String> response = new HashMap<String, String>();
 		response.put("id", id);

@@ -10,13 +10,16 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Entity
 @Data
-public class ProjectData {
+@EqualsAndHashCode(callSuper = false)
+public class ProjectData extends Order{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
@@ -25,16 +28,14 @@ public class ProjectData {
 	@Column(nullable = false, length=35)
 	private String heading;
 
-	@Column(nullable = false, length = 600)
+	@Lob
+	@Column(nullable = false, columnDefinition = "LONGTEXT")
 	private String description;
 
 	@OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
 	@JoinColumn(name = "image_id")
 	private Image image;
 	
-	@Column(columnDefinition = "Integer default '0'")
-	private int projectDataOrder;
-
 	@ManyToOne
 	@JoinColumn(name = "project_id", nullable = false)
 	@JsonBackReference(value = "project-projectData")

@@ -35,7 +35,7 @@ public class ContactController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Contact> updateContact(HttpServletRequest request, @PathVariable("id") String id,
+	public ResponseEntity<Contact> updateContact(HttpServletRequest request, @PathVariable String id,
 			@RequestBody @Valid ContactDto contactDto) {
 		String userId = jwtService.extractUserId(request);
 		return ResponseEntity.ok(contactService.updateContact(id, contactDto, userId));

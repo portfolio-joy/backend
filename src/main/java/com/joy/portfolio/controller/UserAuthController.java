@@ -15,6 +15,7 @@ import com.joy.portfolio.dto.LoginResponseDto;
 import com.joy.portfolio.dto.RegisterDto;
 import com.joy.portfolio.service.UserAuthService;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
@@ -27,6 +28,7 @@ public class UserAuthController {
 
 	@PostMapping("/register")
 	@Transactional
+	@SecurityRequirement(name = "No Authentication")
 	public @ResponseBody ResponseEntity<Void> register(@Valid @RequestBody RegisterDto registerDto) {
 		userAuthService.register(registerDto);
 		return ResponseEntity.status(HttpStatus.CREATED).build();

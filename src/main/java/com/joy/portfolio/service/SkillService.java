@@ -10,6 +10,8 @@ import com.joy.portfolio.exception.DataNotFoundException;
 import com.joy.portfolio.mapper.SkillMapper;
 import com.joy.portfolio.repository.SkillRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class SkillService {
 
@@ -21,6 +23,8 @@ public class SkillService {
 
 	public Skill addSkill(SkillDto skillDto, String userId) {
 		Skill skill = skillMapper.mapDtoToSkill(skillDto);
+		int lastOrderNumber = skillRepository.getLastOrderNumber(userId).orElse(-1);
+		skill.setPosition(lastOrderNumber+1);
 		User user = new User();
 		user.setId(userId);
 		skill.setUser(user);
@@ -38,9 +42,12 @@ public class SkillService {
 		return skillRepository.save(skill);
 	}
 
+	@Transactional
 	public void removeSkill(String id) {
-		if (!skillRepository.existsById(id))
-			throw new DataNotFoundException("Skill Not Found");
+		Skill skill = skillRepository.findById(id)
+				.orElseThrow(() -> new DataNotFoundException("Project Data Not Found"));
 		skillRepository.deleteById(id);
+		skillRepository.updateAllProjectOrderAfterRemoval(skill.getPosition(),
+				skill.getUser().getId());
 	}
 }

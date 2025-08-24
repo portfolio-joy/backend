@@ -13,14 +13,17 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Entity
 @Data
-public class Project {
+@EqualsAndHashCode(callSuper = false)
+public class Project extends Order{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
@@ -29,7 +32,8 @@ public class Project {
 	@Column(nullable = false, length=35)
 	private String name;
 
-	@Column(nullable = false, length = 300)
+	@Lob
+	@Column(nullable = false, columnDefinition = "LONGTEXT")
 	private String briefDetail;
 
 	@OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)

@@ -1,11 +1,14 @@
 package com.joy.portfolio.controller;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -39,7 +42,7 @@ public class AboutMeController {
 	@Autowired
 	JWTService jwtService;
 
-	@PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE })
+	@PostMapping(consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
 	public ResponseEntity<AboutMe> addAboutMe(HttpServletRequest request, @RequestPart String aboutMeData,
 			@RequestPart("image") MultipartFile image) throws IOException {
 		AboutMeDto aboutMeDto = objectMapper.readValue(aboutMeData, AboutMeDto.class);
@@ -49,13 +52,23 @@ public class AboutMeController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(aboutMeService.addAboutMe(aboutMeDto, userId));
 	}
 
-	@PutMapping(value = "/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE })
-	public ResponseEntity<AboutMe> updateAboutMe(HttpServletRequest request, @PathVariable("id") String id,
+	@PutMapping(value = "/{id}", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+	public ResponseEntity<AboutMe> updateAboutMe(HttpServletRequest request, @PathVariable String id,
 			@RequestPart String aboutMeData, @RequestPart("image") MultipartFile image) throws IOException {
 		AboutMeDto aboutMeDto = objectMapper.readValue(aboutMeData, AboutMeDto.class);
 		aboutMeDto.setImage(image);
 		dtoValidator.validate(aboutMeDto);
 		String userId = jwtService.extractUserId(request);
 		return ResponseEntity.status(HttpStatus.OK).body(aboutMeService.updateAboutMe(id, aboutMeDto, userId));
+	}
+
+	@DeleteMapping(value = "/{id}")
+	public ResponseEntity<Map<String, String>> removeAboutMe(HttpServletRequest request,
+			@PathVariable String id) {
+		String userId = jwtService.extractUserId(request);
+		aboutMeService.removeAboutMe(id, userId);
+		Map<String, String> response = new HashMap<String, String>();
+		response.put("id", id);
+		return ResponseEntity.ok(response);
 	}
 }

@@ -27,6 +27,5 @@ public class SkillDto {
 	private int proficiency;
 
 	@NotBlank(message = "Description must not be empty")
-	@Size(max = 600, message = "Description length should be less than 601")
 	private String description;
 }

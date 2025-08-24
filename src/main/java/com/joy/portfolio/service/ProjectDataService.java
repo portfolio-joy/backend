@@ -9,7 +9,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.joy.portfolio.dto.EntityReorderDto;
 import com.joy.portfolio.dto.ProjectDataDto;
+import com.joy.portfolio.dto.ProjectDataResponseDto;
 import com.joy.portfolio.entity.Image;
+import com.joy.portfolio.entity.Project;
 import com.joy.portfolio.entity.ProjectData;
 import com.joy.portfolio.exception.DataNotFoundException;
 import com.joy.portfolio.mapper.ProjectDataMapper;
@@ -34,8 +36,12 @@ public class ProjectDataService {
 	@Autowired
 	ProjectDataMapper projectDataMapper;
 
-	public List<ProjectData> getByProjectNameAndUsername(String projectName, String username) {
-		return projectDataRepository.findByProjectNameAndUsername(projectName, username);
+	public ProjectDataResponseDto findByProjectIdAndUsername(String projectId, String username) {
+		
+		Project project = projectRepository.findByIdAndUsername(projectId, username).orElseThrow(()->new DataNotFoundException("Project Not Found"));	
+		List<ProjectData> projectData = projectDataRepository.findByProjectId(projectId);
+		ProjectDataResponseDto projectDataResponseDto = new ProjectDataResponseDto(project.getName(), projectData);
+		return projectDataResponseDto;
 	}
 
 	public ProjectData addProjectData(ProjectDataDto projectDataDto) throws IOException {
@@ -45,7 +51,7 @@ public class ProjectDataService {
 		ProjectData projectData = projectDataMapper.mapDtoToProjectData(projectDataDto);
 		projectData.setImage(projectDataImage);
 		int lastOrderNumber = projectDataRepository.getLastOrderNumber(projectData.getProject().getId()).orElse(-1);
-		projectData.setProjectDataOrder(lastOrderNumber + 1);
+		projectData.setPosition(lastOrderNumber + 1);
 		return projectDataRepository.save(projectData);
 	}
 
@@ -66,9 +72,9 @@ public class ProjectDataService {
 
 	@Transactional
 	public void reorderProjectData(EntityReorderDto entityReorderDto) {
-		int lastOrderNumber = projectDataRepository.getLastOrderNumber(entityReorderDto.getSuperEntityId()).orElse(-1);
 		if (entityReorderDto.getSuperEntityId() == null || entityReorderDto.getSuperEntityId().trim().length() == 0)
 			throw new IllegalArgumentException("Project Id must not be empty");
+		int lastOrderNumber = projectDataRepository.getLastOrderNumber(entityReorderDto.getSuperEntityId()).orElse(-1);
 		if (entityReorderDto.getOldOrderNumber() > lastOrderNumber
 				|| entityReorderDto.getNewOrderNumber() > lastOrderNumber)
 			throw new IllegalArgumentException("Invalid Order Number");
@@ -85,7 +91,7 @@ public class ProjectDataService {
 		ProjectData projectData = projectDataRepository.findById(id)
 				.orElseThrow(() -> new DataNotFoundException("Project Data Not Found"));
 		projectDataRepository.deleteById(id);
-		projectDataRepository.updateAllProjectDataOrderAfterRemoval(projectData.getProjectDataOrder(),
+		projectDataRepository.updateAllProjectDataOrderAfterRemoval(projectData.getPosition(),
 				projectData.getProject().getId());
 	}
 }

@@ -18,7 +18,6 @@ public class TestimonialDto {
 	private String designation;
 
 	@NotBlank(message="Description must not be empty")
-	@Size(max = 400, message = "Description length should be less than 401")
 	private String description;
 
 	@Min(0)

@@ -10,6 +10,8 @@ import com.joy.portfolio.exception.DataNotFoundException;
 import com.joy.portfolio.mapper.TestimonialMapper;
 import com.joy.portfolio.repository.TestimonialRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class TestimonialService {
 
@@ -21,6 +23,8 @@ public class TestimonialService {
 
 	public Testimonial addTestimonial(TestimonialDto testimonialDto, String userId) {
 		Testimonial testimonial = testimonialMapper.mapDtoToTestimonial(testimonialDto);
+		int lastOrderNumber = testimonialRepository.getLastOrderNumber(userId).orElse(-1);
+		testimonial.setPosition(lastOrderNumber+1);
 		User user = new User();
 		user.setId(userId);
 		testimonial.setUser(user);
@@ -38,9 +42,12 @@ public class TestimonialService {
 		return testimonialRepository.save(testimonial);
 	}
 
+	@Transactional
 	public void removeTestimonial(String id) {
-		if (!testimonialRepository.existsById(id))
-			throw new DataNotFoundException("Testimonial not found");
+		Testimonial testimonial = testimonialRepository.findById(id)
+				.orElseThrow(() -> new DataNotFoundException("Testimonial Not Found"));
 		testimonialRepository.deleteById(id);
+		testimonialRepository.updateAllProjectOrderAfterRemoval(testimonial.getPosition(),
+				testimonial.getUser().getId());
 	}
 }

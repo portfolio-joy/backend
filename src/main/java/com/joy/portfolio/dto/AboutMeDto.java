@@ -20,7 +20,6 @@ public class AboutMeDto {
 	private String name;
 
 	@NotBlank(message = "Description must not be empty")
-	@Size(max = 600, message="Description length should be less than 601")
 	private String description;
 
 	@NotBlank(message = "Skills must not be empty")
@@ -28,6 +27,6 @@ public class AboutMeDto {
 	private String skills;
 
 	@JsonIgnore
-	@ValidFile(fileType = "image/", message = "Invalid Image Type or Image size is larger than 10 MB")
+	@ValidFile(fileType = "image/", message = "Invalid Image Type or Image size is larger than 1 MB")
 	private MultipartFile image;
 }

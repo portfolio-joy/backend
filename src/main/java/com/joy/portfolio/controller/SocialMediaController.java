@@ -41,14 +41,14 @@ public class SocialMediaController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<SocialMedia> updateSocialMedia(HttpServletRequest request, @PathVariable("id") String id,
+	public ResponseEntity<SocialMedia> updateSocialMedia(HttpServletRequest request, @PathVariable String id,
 			@RequestBody @Valid SocialMediaDto socialMediaDto) {
 		String userId = jwtService.extractUserId(request);
 		return ResponseEntity.ok(socialMediaService.updateSocialMedia(id, socialMediaDto, userId));
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Map<String, String>> removeSocialMedia(@PathVariable("id") String id) {
+	public ResponseEntity<Map<String, String>> removeSocialMedia(@PathVariable String id) {
 		socialMediaService.removeSocialMedia(id);
 		Map<String, String> response = new HashMap<>();
 		response.put("id", id);

@@ -2,7 +2,6 @@ package com.joy.portfolio.controller;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.joy.portfolio.dto.EntityReorderDto;
 import com.joy.portfolio.dto.ProjectDataDto;
+import com.joy.portfolio.dto.ProjectDataResponseDto;
 import com.joy.portfolio.entity.ProjectData;
 import com.joy.portfolio.service.JWTService;
 import com.joy.portfolio.service.ProjectDataService;
@@ -47,17 +47,18 @@ public class ProjectDataController {
 	@Autowired
 	JWTService jwtService;
 
-	@GetMapping("/portfolio/{username}/{projectName}")
-	public ResponseEntity<List<ProjectData>> getByProjectNameAndUsername(@PathVariable("username") String username,
-			@PathVariable("projectName") String projectName) {
-		return ResponseEntity.ok(projectDataService.getByProjectNameAndUsername(projectName, username));
+	@GetMapping("/portfolio/{username}/{projectId}")
+	public ResponseEntity<ProjectDataResponseDto> findWithoutAuthentication(@PathVariable String username,
+			@PathVariable String projectId) {
+		return ResponseEntity.ok(projectDataService.findByProjectIdAndUsername(projectId, username));
 	}
 
-	@GetMapping("/projectData/{projectName}")
-	public ResponseEntity<List<ProjectData>> getByProjectNameAndUserId(HttpServletRequest request,
-			@PathVariable("projectName") String projectName) {
-		String username = jwtService.extractUsername(request.getHeader("Authorization").substring(7));
-		return ResponseEntity.ok(projectDataService.getByProjectNameAndUsername(projectName, username));
+	@GetMapping("/projectData/{projectId}")
+	public ResponseEntity<ProjectDataResponseDto> findWithAuthentication(HttpServletRequest request,
+			@PathVariable String projectId) {
+		String token = request.getHeader("Authorization").substring(7);
+		String username = jwtService.extractUsername(token);
+		return ResponseEntity.ok(projectDataService.findByProjectIdAndUsername(projectId, username));
 	}
 
 	@PostMapping(value = "/projectData", consumes = { MediaType.APPLICATION_JSON_VALUE,
@@ -72,14 +73,14 @@ public class ProjectDataController {
 
 	@PutMapping(value = "/projectData/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.MULTIPART_FORM_DATA_VALUE })
-	public ResponseEntity<ProjectData> updateProjectData(@PathVariable("id") String id, @RequestPart String projectData,
+	public ResponseEntity<ProjectData> updateProjectData(@PathVariable String id, @RequestPart String projectData,
 			@RequestPart("image") MultipartFile image) throws IOException {
 		ProjectDataDto projectDataDto = objectMapper.readValue(projectData, ProjectDataDto.class);
 		projectDataDto.setImage(image);
 		dtoValidator.validate(projectDataDto);
 		return ResponseEntity.ok(projectDataService.updateProjectData(id, projectDataDto));
 	}
-	
+
 	@PutMapping("/projectData/reorder")
 	public ResponseEntity<Void> reorderProjectData(@RequestBody @Valid EntityReorderDto entityReorderDto) {
 		projectDataService.reorderProjectData(entityReorderDto);
@@ -87,7 +88,7 @@ public class ProjectDataController {
 	}
 
 	@DeleteMapping("/projectData/{id}")
-	public ResponseEntity<Map<String, String>> removeProjectData(@PathVariable("id") String id) {
+	public ResponseEntity<Map<String, String>> removeProjectData(@PathVariable String id) {
 		projectDataService.removeProjectData(id);
 		Map<String, String> response = new HashMap<String, String>();
 		response.put("id", id);

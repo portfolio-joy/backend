@@ -11,22 +11,25 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Data
 @NoArgsConstructor
-public class Skill {
+@EqualsAndHashCode(callSuper = false)
+public class Skill extends Order {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;
 
-	@Column(nullable = false, length=35)
+	@Column(nullable = false, length = 35)
 	private String name;
 
 	@Column(nullable = false)
@@ -38,7 +41,8 @@ public class Skill {
 	@Max(100)
 	private int proficiency;
 
-	@Column(nullable = false, length = 600)
+	@Lob
+	@Column(nullable = false, columnDefinition = "LONGTEXT")
 	private String description;
 
 	@ManyToOne

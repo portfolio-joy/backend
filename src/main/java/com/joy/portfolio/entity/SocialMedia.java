@@ -13,10 +13,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Entity
 @Data
-public class SocialMedia {
+@EqualsAndHashCode(callSuper = false)
+public class SocialMedia extends Order {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)

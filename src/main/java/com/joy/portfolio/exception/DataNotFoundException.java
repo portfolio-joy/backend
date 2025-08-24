@@ -1,8 +1,11 @@
 package com.joy.portfolio.exception;
 
+import java.io.Serial;
+
 public class DataNotFoundException extends RuntimeException {
 
-	private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = 1L;
 
 	public DataNotFoundException(String message) {
 		super(message);

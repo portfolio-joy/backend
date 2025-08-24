@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.joy.portfolio.dto.AboutMeDto;
@@ -16,6 +17,7 @@ import com.joy.portfolio.repository.AboutMeRepository;
 import com.joy.portfolio.repository.ImageRepository;
 
 @Service
+@Transactional
 public class AboutMeService {
 
 	@Autowired
@@ -40,7 +42,7 @@ public class AboutMeService {
 	}
 
 	public AboutMe updateAboutMe(String id, AboutMeDto aboutMeDto, String userId) throws IOException {
-		AboutMe aboutMe = aboutMeRepository.findById(id)
+		AboutMe aboutMe = aboutMeRepository.findByIdAndUserId(id, userId)
 				.orElseThrow(() -> new DataNotFoundException("AboutMe Not Found"));
 		String oldProfileId = aboutMe.getImage().getId();
 		MultipartFile profile = aboutMeDto.getImage();
@@ -55,5 +57,11 @@ public class AboutMeService {
 		aboutMe = aboutMeRepository.save(aboutMe);
 		imageRepository.deleteById(oldProfileId);
 		return aboutMe;
+	}
+
+	public void removeAboutMe(String id, String userId) {
+		AboutMe aboutMe = this.aboutMeRepository.findByIdAndUserId(id, userId)
+				.orElseThrow(() -> new DataNotFoundException("About Me Not Found"));
+		this.aboutMeRepository.delete(aboutMe);
 	}
 }

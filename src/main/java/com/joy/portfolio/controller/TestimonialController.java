@@ -41,14 +41,14 @@ public class TestimonialController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Testimonial> updateTestimonial(HttpServletRequest request, @PathVariable("id") String id,
+	public ResponseEntity<Testimonial> updateTestimonial(HttpServletRequest request, @PathVariable String id,
 			@RequestBody @Valid TestimonialDto testimonialDto) {
 		String userId = jwtService.extractUserId(request);
 		return ResponseEntity.ok(testimonialService.updateTestimonial(id, testimonialDto, userId));
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Map<String, String>> removeTestimonial(@PathVariable("id") String id) {
+	public ResponseEntity<Map<String, String>> removeTestimonial(@PathVariable String id) {
 		testimonialService.removeTestimonial(id);
 		Map<String, String> response = new HashMap<>();
 		response.put("id", id);

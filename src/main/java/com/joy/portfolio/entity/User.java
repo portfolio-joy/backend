@@ -1,5 +1,6 @@
 package com.joy.portfolio.entity;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -16,25 +17,27 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.OrderBy;
 import lombok.Data;
 
 @Entity
 @Data
 public class User implements UserDetails {
 
-	private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	String id;
 
-	@Column(nullable = false, length=17)
+	@Column(nullable = false, length = 17)
 	String firstName;
 
-	@Column(length=17)
+	@Column(length = 17)
 	String lastName;
 
-	@Column(nullable = false, length = 35)
+	@Column(nullable = false, unique = true, length = 35)
 	String emailId;
 
 	@Column(nullable = false, unique = true, length = 16)
@@ -50,18 +53,22 @@ public class User implements UserDetails {
 	private AboutMe aboutMe = null;
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OrderBy("position")
 	private List<Skill> allSkill = new ArrayList<>();
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OrderBy("position")
 	private List<Project> allProject = new ArrayList<>();
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OrderBy("position")
 	private List<Testimonial> allTestimonial = new ArrayList<>();
 
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Contact contact = null;
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OrderBy("position")
 	private List<SocialMedia> allSocialMedia = new ArrayList<>();
 
 	@Override
