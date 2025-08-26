@@ -19,7 +19,7 @@ public class FileTypeValidator implements ConstraintValidator<ValidFile, Multipa
 
 	@Override
 	public boolean isValid(MultipartFile file, ConstraintValidatorContext context) {
-		return file.getContentType() != null && file.getContentType().startsWith(fileType)
-				&& file.getSize() <= MAX_FILE_SIZE;
+		String contentType = file.getContentType();
+		return contentType != null && contentType.startsWith(fileType) && file.getSize() <= MAX_FILE_SIZE;
 	}
 }
