@@ -59,6 +59,6 @@ public class UserAuthService {
 		Map<String, Object> extraClaims = new HashMap<>();
 		extraClaims.put("userId", user.getId());
 		String jwtToken = jwtService.generateToken(extraClaims, user);
-		return new LoginResponseDto("", jwtToken, user.getFirstName(), user.getPortfolioUrl());
+		return new LoginResponseDto("", jwtToken, user.getFirstName(), user.getUsername());
 	}
 }

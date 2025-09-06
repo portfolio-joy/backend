@@ -33,7 +33,7 @@ public class AboutMe {
 	private String skills;
 
 	@OneToOne(cascade = CascadeType.REMOVE, orphanRemoval = true)
-	@JoinColumn(name = "image_id", nullable = false, foreignKey = @ForeignKey(name = "FK_Image", foreignKeyDefinition = "FOREIGN KEY (image_id) REFERENCES IMAGE(id) ON DELETE CASCADE"))
+	@JoinColumn(name = "image_id", nullable = false, foreignKey = @ForeignKey(name = "FK_Image", foreignKeyDefinition = "FOREIGN KEY (image_id) REFERENCES image(id) ON DELETE CASCADE"))
 	private Image image;
 
 	@OneToOne

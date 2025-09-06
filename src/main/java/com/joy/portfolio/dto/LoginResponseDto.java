@@ -18,6 +18,6 @@ public class LoginResponseDto {
 	@JsonProperty("firstName")
 	private String firstName;
 
-	@JsonProperty("portfolioUrl")
-	private String portfolioUrl;
+	@JsonProperty("username")
+	private String username;
 }

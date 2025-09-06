@@ -38,6 +38,7 @@ public class UserAuthController {
 	public @ResponseBody ResponseEntity<LoginResponseDto> login(@Valid @RequestBody LoginDto loginDto,
 			HttpServletResponse response) {
 		LoginResponseDto loginResponseDto = userAuthService.login(loginDto);
+		System.out.println(loginResponseDto.getUsername());
 		return ResponseEntity.ok(loginResponseDto);
 	}
 }

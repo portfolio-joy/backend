@@ -5,6 +5,8 @@ bin/
 !**/src/main/**/target/
 !**/src/test/**/target/
 **/META-INF/additional-spring-configuration-metadata.json
+/src/main/resources/application.properties
+/src/main/resources/application-prod.properties
 
 ### STS ###
 .apt_generated

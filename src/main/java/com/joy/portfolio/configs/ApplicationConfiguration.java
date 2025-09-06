@@ -61,7 +61,7 @@ public class ApplicationConfiguration {
 	CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
 
-		configuration.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:8080"));
+		configuration.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:8080", "https://portfoliojoy.online"));
 		configuration.setAllowedMethods(List.of("GET", "POST", "DELETE", "PUT", "OPTIONS"));
 		configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Access-Control-Allow-Origin"));
 
