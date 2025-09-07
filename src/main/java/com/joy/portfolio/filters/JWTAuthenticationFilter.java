@@ -1,10 +1,13 @@
 package com.joy.portfolio.filters;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -50,9 +53,11 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
 			if (userCredential != null && authentication == null) {
 				UserDetails userDetails = this.userDetailsService.loadUserByUsername(userCredential);
-				if (jwtService.isTokenValid(token, userDetails)) {
+				String validRole = jwtService.getValidRole(token);
+				if (jwtService.isTokenValid(token, userDetails) && validRole != null) {
+					List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + validRole));
 					UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails,
-							null, userDetails.getAuthorities());
+							null, authorities);
 					authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 					SecurityContextHolder.getContext().setAuthentication(authToken);
 				}
