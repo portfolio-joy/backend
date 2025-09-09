@@ -58,7 +58,8 @@ public class UserAuthService {
 		User user = (User) authentication.getPrincipal();
 		Map<String, Object> extraClaims = new HashMap<>();
 		extraClaims.put("userId", user.getId());
+		extraClaims.put("roleId", user.getRole().getId());
 		String jwtToken = jwtService.generateToken(extraClaims, user);
-		return new LoginResponseDto("", jwtToken, user.getFirstName(), user.getUsername());
+		return new LoginResponseDto("", jwtToken, user.getFirstName(), user.getUsername(), user.getRole().getName());
 	}
 }

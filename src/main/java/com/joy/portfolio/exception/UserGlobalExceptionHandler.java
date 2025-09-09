@@ -8,6 +8,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -86,7 +87,7 @@ public class UserGlobalExceptionHandler {
 			MalformedJwtException malformedJwtException) {
 		Map<String, String> exceptionMap = new HashMap<>();
 		exceptionMap.put("general", "Session Expired");
-		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(exceptionMap);
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(exceptionMap);
 	}
 
 	@ExceptionHandler(value = ExpiredJwtException.class)
@@ -94,7 +95,7 @@ public class UserGlobalExceptionHandler {
 			ExpiredJwtException expiredJwtException) {
 		Map<String, String> exceptionMap = new HashMap<>();
 		exceptionMap.put("general", "Session Expired");
-		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(exceptionMap);
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(exceptionMap);
 	}
 
 	@ExceptionHandler(value = DataNotFoundException.class)
@@ -103,6 +104,14 @@ public class UserGlobalExceptionHandler {
 		Map<String, String> exceptionMap = new HashMap<>();
 		exceptionMap.put("general", dataNotFoundException.getMessage());
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionMap);
+	}
+	
+	@ExceptionHandler(value = AuthorizationDeniedException.class)
+	public @ResponseBody ResponseEntity<Map<String, String>> handleAuthorizationDeniedException(
+			AuthorizationDeniedException authorizationDeniedException) {
+		Map<String, String> exceptionMap = new HashMap<>();
+		exceptionMap.put("general", authorizationDeniedException.getMessage());
+		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(exceptionMap);
 	}
 
 	@ExceptionHandler(value = Exception.class)

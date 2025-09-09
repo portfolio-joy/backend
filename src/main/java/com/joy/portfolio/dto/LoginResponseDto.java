@@ -20,4 +20,7 @@ public class LoginResponseDto {
 
 	@JsonProperty("username")
 	private String username;
+	
+	@JsonProperty("role")
+	private String role;
 }

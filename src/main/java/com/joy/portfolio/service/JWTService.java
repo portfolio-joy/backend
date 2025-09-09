@@ -8,9 +8,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
+import com.joy.portfolio.repository.UserRepository;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -27,6 +30,9 @@ public class JWTService {
 
 	@Value("${security.jwt.expiration-time}")
 	private long expirationTime;
+	
+	@Autowired
+	private UserRepository userRepository;
 
 	private Set<String> blacklistedTokens = new HashSet<>();
 
@@ -91,5 +97,11 @@ public class JWTService {
 	private Key getSignInKey() {
 		byte[] keyBytes = Decoders.BASE64.decode(secretKey);
 		return Keys.hmacShaKeyFor(keyBytes);
+	}
+
+	public String getValidRole(String token) {
+		String userId = extractClaim(token, (claim) -> claim.get("userId")).toString();
+		String roleId = extractClaim(token, (claim) -> claim.get("roleId")).toString();
+		return this.userRepository.getByIdAndRoleId(userId, roleId).orElse(null);
 	}
 }
