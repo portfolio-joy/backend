@@ -12,7 +12,7 @@ import jakarta.servlet.MultipartConfigElement;
 
 @ServletComponentScan
 @SpringBootApplication
-@ComponentScan(basePackages = { "com.joy.portfolio", "com.portfolio.joy.configs" })
+@ComponentScan(basePackages = { "com.joy.portfolio", "com.joy.portfolio.configs" })
 public class BackendApplication {
 
 	public static void main(String[] args) {
