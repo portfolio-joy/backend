@@ -11,9 +11,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@NoArgsConstructor
 public class Role {
 
 	@Id
@@ -25,4 +27,8 @@ public class Role {
 	
 	@OneToMany(mappedBy = "role", fetch = FetchType.EAGER)
 	private List<User> allUser= new ArrayList<>();
+
+	public Role(String name) {
+		this.name = name;
+	}
 }
