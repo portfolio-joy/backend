@@ -23,9 +23,11 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.OrderBy;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@NoArgsConstructor
 public class User implements UserDetails {
 
     @Serial
@@ -79,6 +81,13 @@ public class User implements UserDetails {
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@OrderBy("position")
 	private List<SocialMedia> allSocialMedia = new ArrayList<>();
+	
+	public User(String firstName, String lastName, String emailId, String username) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.emailId = emailId;
+		this.username = username;
+	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

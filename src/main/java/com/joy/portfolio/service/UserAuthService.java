@@ -16,8 +16,10 @@ import com.joy.portfolio.constants.PortfolioURL;
 import com.joy.portfolio.dto.LoginDto;
 import com.joy.portfolio.dto.LoginResponseDto;
 import com.joy.portfolio.dto.RegisterDto;
+import com.joy.portfolio.entity.Role;
 import com.joy.portfolio.entity.User;
 import com.joy.portfolio.mapper.UserMapper;
+import com.joy.portfolio.repository.RoleRepository;
 import com.joy.portfolio.repository.UserRepository;
 
 @Service
@@ -25,6 +27,9 @@ public class UserAuthService {
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private RoleRepository roleRepository;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -47,8 +52,10 @@ public class UserAuthService {
 			throw new DataIntegrityViolationException("Duplicate entry '"+ registerDto.getUsername() +"' for key 'user.username'");
 		}
 		User user = userMapper.mapDtoToUser(registerDto);
+		Role role = roleRepository.findByName("User").orElse(null);
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		user.setPortfolioUrl(PortfolioURL.url + user.getUsername());
+		user.setRole(role);
 		userRepository.save(user);
 	}
 

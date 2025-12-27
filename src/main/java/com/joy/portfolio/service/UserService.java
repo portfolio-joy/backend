@@ -1,5 +1,7 @@
 package com.joy.portfolio.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,5 +31,9 @@ public class UserService {
 				.orElseThrow(() -> new DataNotFoundException("User Not Found"));
 		ResponseUserDto responseUserDto = userMapper.mapUserToDto(user);
 		return responseUserDto;
+	}
+
+	public List<User> getAllUsers() { 
+		return userRepository.findAllButNotRole("Admin");
 	}
 }
