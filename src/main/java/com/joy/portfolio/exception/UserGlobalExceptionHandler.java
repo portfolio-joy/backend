@@ -85,7 +85,7 @@ public class UserGlobalExceptionHandler {
 	@ExceptionHandler(value = MalformedJwtException.class)
 	public @ResponseBody ResponseEntity<Map<String, String>> handleMalformedJwtException(
 			MalformedJwtException malformedJwtException) {
-		Map<String, String> exceptionMap = new HashMap<>();
+		Map<String, String> exceptionMap = new HashMap<>();	
 		exceptionMap.put("general", "Session Expired");
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(exceptionMap);
 	}
@@ -117,7 +117,7 @@ public class UserGlobalExceptionHandler {
 	@ExceptionHandler(value = Exception.class)
 	public @ResponseBody ResponseEntity<Map<String, String>> handleException(Exception exception) {
 		Map<String, String> exceptionMap = new HashMap<>();
-		exceptionMap.put("general", exception.getMessage());
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionMap);
+		exceptionMap.put("general", "Something went wrong!! Please try again later");
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exceptionMap);
 	}
 }
